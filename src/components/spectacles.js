@@ -1,52 +1,38 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import Match from 'react-router/Match'
+import Link from 'react-router/Link'
+import Redirect from 'react-router/Redirect'
 
 import VisibleSchedulesList from './schedules_list.js'
 import VisibleFiltersList from './filters_list.js'
 
-const mapStateToProps = (state) => {
-  return {
-    activeView: state.ui.activeView,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeView: (e) => { dispatch({ type: "CHANGE_VIEW", view: e.currentTarget.innerHTML }) },
-  }
-}
-
-const Spectacles = ({ activeView, changeView }) =>
-  <main style={{margin: "0 auto", maxWidth: "1200px"}}>
+const Spectacles = () => {
+  return <main style={{margin: "0 auto", maxWidth: "1200px"}}>
 
     <nav className="pt-navbar pt-dark">
       <div className="pt-navbar-group pt-align-left">
         <div className="pt-navbar-heading">Spectacles</div>
         <span className="pt-navbar-divider"></span>
 
-        { [{name: 'Schedules', icon: 'document'}, {name: 'Filters', icon: 'flash'}]
-          .map( (button) => <button
-            onClick={changeView}
-            className={`pt-button pt-minimal pt-icon-${button.icon} ${activeView === button.name ? 'pt-active' : ''}`}
-          >{button.name}</button> )
-        }
+        <Link to="/schedules" className="pt-button pt-minimal pt-icon-document" activeClassName="pt-active">Schedules</Link>
+        <Link to="/filters" className="pt-button pt-minimal pt-icon-flash" activeClassName="pt-active">Filters</Link>
 
       </div>
       <div className="pt-navbar-group pt-align-right">
-        <input className="pt-input" placeholder={`Search ${activeView.toLowerCase()}...`} type="text" />
+        <input className="pt-input" placeholder={`Search Spectacles...`} type="text" />
       </div>
     </nav>
 
-    { activeView === "Schedules"
-      ? <VisibleSchedulesList />
-      : <VisibleFiltersList />
-    }
+    <Match exactly pattern="/" render={() => <Redirect to="/filters" />} />
+    <Match pattern="/filters" component={VisibleFiltersList} />
+    <Match pattern="/schedules" component={VisibleSchedulesList} />
 
   </main>
+}
 
 Spectacles.propTypes = {
   filters: React.PropTypes.array,
   schedules: React.PropTypes.array
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Spectacles)
+export default Spectacles

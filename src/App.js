@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 
+import Router from 'react-router/BrowserRouter'
+
 import Spectacles from './components/spectacles.js'
 
 import './App.css'
@@ -52,7 +54,9 @@ const store = createStore( reducer, {
 class App extends Component {
   render() {
     return <Provider store={store} >
-      <Spectacles />
+      <Router>
+        <Spectacles />
+      </Router>
     </Provider>
   }
 }

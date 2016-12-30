@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Link from 'react-router/Link'
 
 const mapStateToProps = (state) => {
   return {
@@ -38,14 +39,17 @@ export default connect(mapStateToProps)(FiltersList)
 
 
 const FiltersListEntry = ({name, ce, vlt, color, basePrice, ods, lRatings}) => {
-  return <tr>
-    <td><span className="pt-tag pt-minimal">{name}</span></td>
-    <td>{ce ? "Certified" : "Pending"}</td>
-    <td>{`${vlt}% ${color}`}</td>
-    <td>{`$${basePrice}`}</td>
-    <td><RangeList items={ods} /></td>
-    <td><RangeList items={lRatings} /></td>
-  </tr>
+  return <Link to={`/filters/${name}`}>{
+    ({ onClick}) =>
+      <tr onClick={onClick}>
+        <td><span className="pt-tag pt-minimal">{name}</span></td>
+        <td>{ce ? "Certified" : "Pending"}</td>
+        <td>{`${vlt}% ${color}`}</td>
+        <td>{`$${basePrice}`}</td>
+        <td><RangeList items={ods} /></td>
+        <td><RangeList items={lRatings} /></td>
+      </tr>
+  }</Link>
 }
 
 const RangeList = ({ items }) => {

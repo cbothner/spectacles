@@ -1,3 +1,7 @@
 body {
   background: #F5F8FA;
 }
+
+.Filter__details-control-group > * {
+  flex-shrink: 1;
+}

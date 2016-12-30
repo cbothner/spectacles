@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Dialog, Button, InputGroup, Tag } from '@blueprintjs/core'
 
 import SpectrophotometerData from './spectrophotometer_data.js'
+import RangeTable from './range_table.js'
 
 const mapStateToProps = (state, ownProps) => {
   return {...state.filtersByName[ownProps.params.filterName]}
@@ -15,11 +16,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const Filter = ({ name, ce, color, vlt, onClose }) =>
-  <Dialog isOpen={!!name} onClose={onClose} title={`Filter details: ${name}`} style={{width: 763}}>
+const Filter = ({ name, ce, basePrice, color, vlt, ods, lRatings, onClose }) =>
+  <Dialog isOpen={!!name} onClose={onClose} title={`Filter details: ${name}`} style={{width: 763, top: '15%'}}>
     <div className="pt-dialog-body">
 
-      <div className="pt-control-group">
+      <div className="Filter__details-control-group pt-control-group">
         <InputGroup leftIconName='flash' placeholder="Name" value={name}
           rightElement={
             <Button
@@ -29,6 +30,7 @@ const Filter = ({ name, ce, color, vlt, onClose }) =>
             />
           }
         />
+        <InputGroup leftIconName='dollar' placeholder="Base Price" value={basePrice} />
         <InputGroup leftIconName='tint' placeholder="Color" value={color} />
         <InputGroup placeholder="VLT" value={vlt} rightElement={
           <Tag className="pt-minimal">%</Tag>
@@ -37,13 +39,9 @@ const Filter = ({ name, ce, color, vlt, onClose }) =>
 
       <SpectrophotometerData name={name} />
 
-      <div style={{display: 'flex', marginTop: '1em'}}>
-        <div className="pt-card" style={{flex: 1}}>
-          <h5>OD Ratings</h5>
-        </div>
-        <div className="pt-card" style={{flex: 1, marginLeft: '1em'}}>
-          <h5>L-Ratings</h5>
-        </div>
+      <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '1em'}}>
+        <RangeTable name="OD Ratings" items={ods} />
+        <RangeTable name="L-Ratings" items={lRatings} />
       </div>
 
     </div>

@@ -7,8 +7,8 @@ import Router from 'react-router/HashRouter'
 
 import Spectacles from './components/spectacles.js'
 
-import './App.css'
 import "@blueprintjs/core/dist/blueprint.css"
+import './App.css'
 
 const reducer = (state, action) => {
   switch (action.type) {

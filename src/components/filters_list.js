@@ -1,6 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Match from 'react-router/Match'
 import Link from 'react-router/Link'
+
+import Filter from './filter.js'
 
 const mapStateToProps = (state) => {
   return {
@@ -8,7 +11,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const FiltersList = ({ filters }) => {
+const FiltersList = ({ filters, pathname }) => {
   return <article style={{marginTop: "2em"}}>
     <h4>Filter specifications</h4>
     <table className="pt-table pt-interactive" style={{width: '100%'}}>
@@ -26,6 +29,8 @@ const FiltersList = ({ filters }) => {
         {filters.map((filter) => <FiltersListEntry {...filter} />)}
       </tbody>
     </table>
+
+    <Match pattern={`${pathname}/:filterName`} component={Filter} />
   </article>
 }
 

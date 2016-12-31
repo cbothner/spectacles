@@ -9,12 +9,12 @@ const mapStateToProps = (state) => {
 
 const SchedulesList = ({schedules}) => {
   return <article style={{marginTop: "2em"}}>
-    <h4>Specification schedules</h4>
+    <h4>Specification Schedules</h4>
     <table className="pt-table pt-interactive" style={{width: '100%'}}>
       <thead>
         <tr>
-          <th style={{maxWidth: '5em'}}>Schedule name</th>
-          <th>Included filters</th>
+          <th style={{maxWidth: '5em'}}>Schedule Name</th>
+          <th>Included Filters</th>
         </tr>
       </thead>
       <tbody>

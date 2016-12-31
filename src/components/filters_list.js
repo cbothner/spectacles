@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch) => {
 const FiltersList = ({ filters = [], pathname, onAddFilter }) => {
   return <article style={{marginTop: "2em"}}>
     <div style={{display: 'flex', justifyContent: 'space-between'}}>
-      <h4>Filter specifications</h4>
+      <h4>Filter Specifications</h4>
       <Button intent={Intent.SUCCESS} iconName="add" text="New Filter" onClick={onAddFilter} />
     </div>
     <table className="pt-table pt-interactive" style={{width: '100%'}}>
@@ -59,10 +59,10 @@ const FiltersListEntry = ({id, name, ce, vlt, color, basePrice, ods, lRatings}) 
   return <Link to={`/filters/${id}`}>{
     ({ onClick}) =>
       <tr onClick={onClick}>
-        <td><span className="pt-tag pt-minimal">{name}</span></td>
+        <td><span className="pt-tag pt-minimal">{name || '—'}</span></td>
         <td>{ce ? "Certified" : "Pending"}</td>
-        <td>{`${vlt}% ${color}`}</td>
-        <td>{`$${parseFloat(basePrice) % 1 ? parseFloat(basePrice).toFixed(2) : parseInt(basePrice, 10)}`}</td>
+        <td>{`${vlt || '—'}% ${color || '—'}`}</td>
+        <td>{`$${parseFloat(basePrice) % 1 ? parseFloat(basePrice).toFixed(2) : parseInt(basePrice, 10) || '—'}`}</td>
         <td><RangeList items={ods} /></td>
         <td><RangeList items={lRatings} /></td>
       </tr>

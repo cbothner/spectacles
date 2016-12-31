@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { NonIdealState } from '@blueprintjs/core'
 import { LineChart, XAxis, YAxis, Legend, Line } from 'recharts'
 
 import { updateFilter } from '../actions.js'
@@ -21,23 +22,27 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const SpectrophotometerData = ({data = [], onChange}) =>
+const SpectrophotometerData = ({data, onChange}) =>
   <div className="pt-card" style={{marginTop: '1em'}}>
     <h5>Spectrophotometer Data</h5>
-    <p>Paste wavelength, OD, and %T data from Excel</p>
     <div style={{display: 'flex'}}>
       <textarea style={{flex: 1, height: 200}} value={convertDataToCSV(data)} onChange={onChange} />
-      <div style={{flex: 3}}>
-        <LineChart data={data} width={500} height={200}
-          margin={{top: 5, right: -30, bottom: -5, left: -10}}
-        >
-          <XAxis dataKey="wavelength" />
-          <YAxis />
-          <YAxis yAxisId={1} orientation="right" />
-          <Legend />
-          <Line name="%T" dataKey="percentT" yAxisId={1} dot={false} type="basis" stroke="#DB3737" strokeDasharray="4, 4" />
-          <Line name="OD" dataKey="od" dot={false} type="basis" stroke="#137CBD" strokeWidth="2" />
-        </LineChart>
+      <div style={{flex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+        { data
+          ? <LineChart data={data} width={500} height={200}
+              margin={{top: 5, right: -30, bottom: -5, left: -10}}>
+              <XAxis dataKey="wavelength" />
+              <YAxis />
+              <YAxis yAxisId={1} orientation="right" />
+              <Legend />
+              <Line name="%T" dataKey="percentT" yAxisId={1} dot={false} type="basis" stroke="#DB3737" strokeDasharray="4, 4" />
+              <Line name="OD" dataKey="od" dot={false} type="basis" stroke="#137CBD" strokeWidth="2" />
+            </LineChart>
+          : <NonIdealState
+              title="No Data"
+              description="Paste wavelength, OD, and %T data from Excel."
+              visual="timeline-line-chart" />
+        }
       </div>
     </div>
   </div>
@@ -45,7 +50,7 @@ const SpectrophotometerData = ({data = [], onChange}) =>
 export default connect(mapStateToProps, mapDispatchToProps)(SpectrophotometerData)
 
 
-function convertDataToCSV(data) {
+function convertDataToCSV(data = []) {
   return data.map((row) => `${row.wavelength},${row.od},${row.percentT}`).join('\n')
 }
 

@@ -125,6 +125,9 @@ const store = createStore( reducer, {
         {range: '0.1W 2*10E-5J 520–532', value: 'RB2'},
       ],
     },
+    2: {
+      id: 2,
+    },
   },
   schedulesById: {
     1: {

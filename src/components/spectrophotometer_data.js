@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { NonIdealState } from '@blueprintjs/core'
-import { LineChart, XAxis, YAxis, Legend, Line } from 'recharts'
+import { LineChart, XAxis, YAxis, Legend, Line, Tooltip } from 'recharts'
 
 import { updateFilter } from '../actions.js'
 
@@ -31,12 +31,13 @@ const SpectrophotometerData = ({data, onChange}) =>
         { data
           ? <LineChart data={data} width={500} height={200}
               margin={{top: 5, right: -30, bottom: -5, left: -10}}>
-              <XAxis dataKey="wavelength" />
+              <XAxis dataKey="wavelength" type="number" domain={['dataMin', 'dataMax']} tickCount={20} />
               <YAxis />
               <YAxis yAxisId={1} orientation="right" />
               <Legend />
-              <Line name="%T" dataKey="percentT" yAxisId={1} dot={false} type="basis" stroke="#DB3737" strokeDasharray="4, 4" />
+              <Tooltip />
               <Line name="OD" dataKey="od" dot={false} type="basis" stroke="#137CBD" strokeWidth="2" />
+              <Line name="%T" dataKey="percentT" yAxisId={1} dot={false} type="basis" stroke="#DB3737" strokeDasharray="4, 4" />
             </LineChart>
           : <NonIdealState
               title="No Data"

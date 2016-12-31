@@ -28,7 +28,7 @@ const RangeTable = ({items = [], name, setItems}) =>
         onChange={(e) => setItems(update(items, i, {value: e.currentTarget.value}))}/>
       <Button intent={Intent.DANGER} iconName="remove" onClick={() => setItems(remove(items, i))} />
     </div>)}
-    <Button intent={Intent.SUCCESS} iconName="add" text="Add" style={{float: 'right'}}
+    <Button intent={Intent.SUCCESS} iconName="add" text="Add"
       onClick={() => setItems(push(items, {range: '', value: ''}))}
       />
     {/*

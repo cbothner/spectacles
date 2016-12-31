@@ -7,7 +7,7 @@ import { updateFilter } from '../actions.js'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    items: state.filtersById[ownProps.filterId][ownProps.itemsKey]
+    items: state.filtersById[ownProps.filterId][ownProps.itemsKey],
   }
 }
 
@@ -17,10 +17,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setItems: (data) => dispatch(updateFilter(filterId, {[itemsKey]: data}))
   } }
 
-const RangeTable = ({items, name, setItems}) =>
+const RangeTable = ({items = [], name, setItems}) =>
   <div className="pt-card" style={{width: 'calc(50% - 0.5em)'}}>
     <h5>{name}</h5>
-    {items.map((item, i) => <div className='pt-control-group' style={{marginBottom: '0.5em'}}>
+    {items.map((item, i) => <div key={i} className='pt-control-group' style={{marginBottom: '0.5em'}}>
       <Button iconName="drag-handle-horizontal" style={{cursor: '-webkit-grab'}} />
       <input className="pt-input" placeholder='Range' value={item.range} style={{width: 177}}
         onChange={(e) => setItems(update(items, i, {range: e.currentTarget.value}))}/>

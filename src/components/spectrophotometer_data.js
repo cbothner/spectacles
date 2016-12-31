@@ -7,7 +7,7 @@ import { updateFilter } from '../actions.js'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    data: state.filtersById[ownProps.id].spectrophotometerData
+    data: state.filtersById[ownProps.id].spectrophotometerData,
   }
 }
 
@@ -21,7 +21,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const SpectrophotometerData = ({data, onChange}) =>
+const SpectrophotometerData = ({data = [], onChange}) =>
   <div className="pt-card" style={{marginTop: '1em'}}>
     <h5>Spectrophotometer Data</h5>
     <p>Paste wavelength, OD, and %T data from Excel</p>

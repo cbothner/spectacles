@@ -3,17 +3,29 @@ import { connect } from 'react-redux'
 import Match from 'react-router/Match'
 import Link from 'react-router/Link'
 
+import { Button, Intent } from '@blueprintjs/core'
+
 import Filter from './filter.js'
+import { addFilter } from '../actions.js'
 
 const mapStateToProps = (state) => {
   return {
-    filters: Object.values(state.filtersById),
+    filters: Object.values(state.filtersById).sort((a, b) => a.name > b.name),
   }
 }
 
-const FiltersList = ({ filters, pathname }) => {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAddFilter: () => dispatch(addFilter())
+  }
+}
+
+const FiltersList = ({ filters = [], pathname, onAddFilter }) => {
   return <article style={{marginTop: "2em"}}>
-    <h4>Filter specifications</h4>
+    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+      <h4>Filter specifications</h4>
+      <Button intent={Intent.SUCCESS} iconName="add" text="New Filter" onClick={onAddFilter} />
+    </div>
     <table className="pt-table pt-interactive" style={{width: '100%'}}>
       <thead>
         <tr>
@@ -26,7 +38,7 @@ const FiltersList = ({ filters, pathname }) => {
         </tr>
       </thead>
       <tbody>
-        {filters.map((filter) => <FiltersListEntry {...filter} />)}
+        {filters.map((filter) => <FiltersListEntry key={filter.name} {...filter} />)}
       </tbody>
     </table>
 
@@ -38,7 +50,7 @@ FiltersList.propTypes = {
   filters: React.PropTypes.array
 }
 
-export default connect(mapStateToProps)(FiltersList)
+export default connect(mapStateToProps, mapDispatchToProps)(FiltersList)
 
 
 
@@ -57,10 +69,10 @@ const FiltersListEntry = ({id, name, ce, vlt, color, basePrice, ods, lRatings}) 
   }</Link>
 }
 
-const RangeList = ({ items }) => {
+const RangeList = ({ items = [] }) => {
   return <p style={{maxWidth: '30em'}} className="pt-text-overflow-ellipsis">
     {items.map((item, i) => {
-      return <span>
+      return <span key={i}>
         {i === 0 ? "" : <span className="pt-text-muted"> | </span>}
         {item.range} <strong>{item.value}</strong>
       </span>

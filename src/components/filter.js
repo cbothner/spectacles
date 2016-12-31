@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Dialog, Button, InputGroup, Tag } from '@blueprintjs/core'
+import { Dialog, Button, InputGroup, Tag, Intent } from '@blueprintjs/core'
 
 import SpectrophotometerData from './spectrophotometer_data.js'
 import RangeTable from './range_table.js'
 
-import { updateFilter } from '../actions.js'
+import { updateFilter, deleteFilter } from '../actions.js'
 
 const mapStateToProps = (state, ownProps) => {
   return {...state.filtersById[ownProps.params.filterId]}
@@ -18,11 +18,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onClose: () => window.location.hash = '/filters',
     onChange: (attr) => (e) => dispatch(updateFilter(id, {[attr]: e.currentTarget.value})),
     onToggleCE: (val) => dispatch(updateFilter(id, {ce: val})),
+    onDelete: () => dispatch(deleteFilter(id)),
   }
 }
 
-const Filter = ({ id, name, ce, basePrice, color, vlt, ods, lRatings, onClose, onChange, onToggleCE }) =>
-  <Dialog isOpen={!!name} onClose={onClose} title={`Filter details: ${name}`} style={{width: 763, top: '15%'}}>
+const Filter = ({ id, name, ce, basePrice, color, vlt, ods, lRatings, onClose, onChange, onToggleCE, onDelete }) =>
+  <Dialog isOpen={!!id} onClose={onClose} title={`Filter details: ${name}`} style={{width: 763, top: '15%'}}>
     <div className="pt-dialog-body">
 
       <div className="Filter__details-control-group pt-control-group">
@@ -54,9 +55,11 @@ const Filter = ({ id, name, ce, basePrice, color, vlt, ods, lRatings, onClose, o
       </div>
 
     </div>
-    <div className="pt-dialog-footer">
+    <div className="pt-dialog-footer" style={{display: 'flex', justifyContent: 'space-between'}}>
+      <Button text="Delete" onClick={onDelete} intent={Intent.DANGER} />
       <div className="pt-dialog-footer-actions">
-        <Button text="Done" onClick={onClose} />
+        <Button text="Cancel" onClick={onClose} />
+        <Button text="Save" onClick={onClose} intent={Intent.PRIMARY} />
       </div>
     </div>
   </Dialog>

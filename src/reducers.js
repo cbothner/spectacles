@@ -1,14 +1,25 @@
 import { combineReducers } from 'redux'
-import { UPDATE_FILTER } from './actions.js'
+import { ADD_FILTER, UPDATE_FILTER, DELETE_FILTER } from './actions.js'
 
 function filtersById(state = {}, action) {
   switch (action.type) {
+
+    case ADD_FILTER:
+      return {
+        ...state,
+        [action.id]: {id: action.id},
+      }
 
     case UPDATE_FILTER:
       return {
         ...state,
         [action.id]: {...state[action.id], ...action.data},
       }
+
+    case DELETE_FILTER:
+      let newState = {...state}
+      delete newState[action.id]
+      return newState
 
     default: return state
 

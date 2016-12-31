@@ -7,7 +7,7 @@ import Filter from './filter.js'
 
 const mapStateToProps = (state) => {
   return {
-    filters: Object.values(state.filtersByName),
+    filters: Object.values(state.filtersById),
   }
 }
 
@@ -30,7 +30,7 @@ const FiltersList = ({ filters, pathname }) => {
       </tbody>
     </table>
 
-    <Match pattern={`${pathname}/:filterName`} component={Filter} />
+    <Match pattern={`${pathname}/:filterId`} component={Filter} />
   </article>
 }
 
@@ -43,14 +43,14 @@ export default connect(mapStateToProps)(FiltersList)
 
 
 
-const FiltersListEntry = ({name, ce, vlt, color, basePrice, ods, lRatings}) => {
-  return <Link to={`/filters/${name}`}>{
+const FiltersListEntry = ({id, name, ce, vlt, color, basePrice, ods, lRatings}) => {
+  return <Link to={`/filters/${id}`}>{
     ({ onClick}) =>
       <tr onClick={onClick}>
         <td><span className="pt-tag pt-minimal">{name}</span></td>
         <td>{ce ? "Certified" : "Pending"}</td>
         <td>{`${vlt}% ${color}`}</td>
-        <td>{`$${basePrice}`}</td>
+        <td>{`$${parseFloat(basePrice) % 1 ? parseFloat(basePrice).toFixed(2) : parseInt(basePrice, 10)}`}</td>
         <td><RangeList items={ods} /></td>
         <td><RangeList items={lRatings} /></td>
       </tr>
@@ -58,7 +58,7 @@ const FiltersListEntry = ({name, ce, vlt, color, basePrice, ods, lRatings}) => {
 }
 
 const RangeList = ({ items }) => {
-  return <p style={{maxWidth: "30em"}} className="pt-text-overflow-ellipsis">
+  return <p className="pt-text-overflow-ellipsis">
     {items.map((item, i) => {
       return <span>
         {i === 0 ? "" : <span className="pt-text-muted"> | </span>}

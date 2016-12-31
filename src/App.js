@@ -5,21 +5,16 @@ import { Provider } from 'react-redux'
 
 import Router from 'react-router/HashRouter'
 
-import Spectacles from './components/spectacles.js'
-
 import "@blueprintjs/core/dist/blueprint.css"
 import './App.css'
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'CHANGE_VIEW': return {...state, ui: {...state.ui, activeView: action.view}}
-    default: return state
-  }
-}
+import Spectacles from './components/spectacles.js'
+import reducer from './reducers.js'
 
 const store = createStore( reducer, {
-  filtersByName: {
-    PBG: {
+  filtersById: {
+    1: {
+      id: 1,
       name: 'PBG',
       ce: true,
       basePrice: "77.50",
@@ -132,10 +127,10 @@ const store = createStore( reducer, {
     },
   },
   schedulesById: {
-    '1': {
+    1: {
       name: "Apple, Inc.",
       suggestions: [
-        {filterName: 'PBG', specialPrice: 65 },
+        {filterId: 1, specialPrice: 65 },
       ],
     },
   },

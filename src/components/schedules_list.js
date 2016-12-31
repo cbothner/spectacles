@@ -40,7 +40,7 @@ const SchedulesListEntry = ({name, suggestions}) => {
     <td>{name}</td>
     <td>
       {suggestions.map((suggestion) => {
-        return <div style={{marginRight: '5px'}} className="pt-tag pt-minimal">{suggestion.filterName}</div>
+        return <div style={{marginRight: '5px'}} className="pt-tag pt-minimal">{suggestion.filterId}</div>
       })}
     </td>
   </tr>

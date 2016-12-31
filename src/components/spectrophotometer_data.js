@@ -3,21 +3,30 @@ import { connect } from 'react-redux'
 
 import { LineChart, XAxis, YAxis, Legend, Line } from 'recharts'
 
+import { updateFilter } from '../actions.js'
+
 const mapStateToProps = (state, ownProps) => {
   return {
-    data: state.filtersByName[ownProps.name].spectrophotometerData
+    data: state.filtersById[ownProps.id].spectrophotometerData
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return {}
+  return {
+    onChange: (e) => {
+      dispatch(updateFilter(ownProps.id, {
+        spectrophotometerData: convertCSVToData(e.currentTarget.value)
+      }))
+    }
+  }
 }
 
-const SpectrophotometerData = ({data}) =>
+const SpectrophotometerData = ({data, onChange}) =>
   <div className="pt-card" style={{marginTop: '1em'}}>
     <h5>Spectrophotometer Data</h5>
+    <p>Paste wavelength, OD, and %T data from Excel</p>
     <div style={{display: 'flex'}}>
-      <textarea style={{flex: 1, height: 200}} value={convertDataToCSV(data)} />
+      <textarea style={{flex: 1, height: 200}} value={convertDataToCSV(data)} onChange={onChange} />
       <div style={{flex: 3}}>
         <LineChart data={data} width={500} height={200}
           margin={{top: 5, right: -30, bottom: -5, left: -10}}
@@ -26,8 +35,8 @@ const SpectrophotometerData = ({data}) =>
           <YAxis />
           <YAxis yAxisId={1} orientation="right" />
           <Legend />
-          <Line name="OD" dataKey="od" dot={false} type="basis" stroke="#137CBD" />
-          <Line name="%T" dataKey="percentT" yAxisId={1} dot={false} type="basis" stroke="#DB3737" />
+          <Line name="%T" dataKey="percentT" yAxisId={1} dot={false} type="basis" stroke="#DB3737" strokeDasharray="4, 4" />
+          <Line name="OD" dataKey="od" dot={false} type="basis" stroke="#137CBD" strokeWidth="2" />
         </LineChart>
       </div>
     </div>
@@ -38,4 +47,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(SpectrophotometerDat
 
 function convertDataToCSV(data) {
   return data.map((row) => `${row.wavelength},${row.od},${row.percentT}`).join('\n')
+}
+
+function convertCSVToData(csv) {
+  return csv.split('\n').map((row) => {
+    let x = row.split(/[, \t]+/)
+    return x.length === 3 && !isNaN(x[0])
+      ? { wavelength: parseInt(x[0], 10), od: parseFloat(x[1]), percentT: parseFloat(x[2]) }
+      : null
+  }).filter(x => x)
 }

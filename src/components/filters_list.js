@@ -58,7 +58,7 @@ const FiltersListEntry = ({id, name, ce, vlt, color, basePrice, ods, lRatings}) 
 }
 
 const RangeList = ({ items }) => {
-  return <p className="pt-text-overflow-ellipsis">
+  return <p style={{maxWidth: '30em'}} className="pt-text-overflow-ellipsis">
     {items.map((item, i) => {
       return <span>
         {i === 0 ? "" : <span className="pt-text-muted"> | </span>}

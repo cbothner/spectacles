@@ -49,8 +49,8 @@ const Filter = ({ id, name, ce, basePrice, color, vlt, ods, lRatings, onClose, o
       <SpectrophotometerData id={id} />
 
       <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '1em'}}>
-        <RangeTable name="OD Ratings" items={ods} />
-        <RangeTable name="L-Ratings" items={lRatings} />
+        <RangeTable filterId={id} name="OD Ratings" itemsKey="ods" />
+        <RangeTable filterId={id} name="L-Ratings" itemsKey="lRatings" />
       </div>
 
     </div>

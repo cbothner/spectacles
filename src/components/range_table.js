@@ -31,29 +31,6 @@ const RangeTable = ({items = [], name, setItems}) =>
     <Button intent={Intent.SUCCESS} iconName="add" text="Add"
       onClick={() => setItems(push(items, {range: '', value: ''}))}
       />
-    {/*
-      <table className="pt-table pt-condensed" style={{width: '100%'}}>
-        <thead>
-          <tr>
-            <th style={{width: '1em'}} />
-            <th>Range</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item) => <tr>
-            <td style={{width: '1em'}}><Button className='pt-minimal' intent={Intent.DANGER} iconName='remove' text='' /></td>
-            <td style={{verticalAlign: 'middle'}}>{item.range}</td>
-            <td style={{verticalAlign: 'middle'}}>{item.value}</td>
-          </tr>)}
-          <tr>
-            <td colspan={3}>
-              <Button className='pt-minimal' intent={Intent.SUCCESS} iconName='add' />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    */}
   </div>
 
 export default connect(mapStateToProps, mapDispatchToProps)(RangeTable)

@@ -127,13 +127,17 @@ const store = createStore( reducer, {
     },
     2: {
       id: 2,
+      name: "YAG",
+      basePrice: 100,
     },
   },
   schedulesById: {
     1: {
+      id: 1,
       name: "Apple, Inc.",
       suggestions: [
         {filterId: 1, specialPrice: 65 },
+        {filterId: 2, specialPrice: undefined},
       ],
     },
   },

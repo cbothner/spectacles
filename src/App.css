@@ -2,6 +2,10 @@ body {
   background: #F5F8FA;
 }
 
-.Filter__details-control-group > * {
+.pt-control-group > * {
   flex-shrink: 1;
+}
+
+.flex-grow {
+  flex-grow: 1;
 }

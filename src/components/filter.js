@@ -23,10 +23,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 const Filter = ({ id, name, ce, basePrice, color, vlt, ods, lRatings, onClose, onChange, onToggleCE, onDelete }) =>
-  <Dialog isOpen={!!id} onClose={onClose} title={`Filter details: ${name || "New Filter"}`} style={{width: 763, top: '15%'}}>
+  <Dialog isOpen={!!id} onClose={onClose} title="Filter Details" style={{width: 763, top: '15%'}}>
     <div className="pt-dialog-body">
 
-      <div className="Filter__details-control-group pt-control-group">
+      <div className="pt-control-group">
         <InputGroup leftIconName='flash' placeholder="Name" value={name} onChange={onChange('name')}
           rightElement={
             <Button

@@ -3,29 +3,41 @@ import { connect } from 'react-redux'
 
 import { Dialog, Button, InputGroup, Tag, Intent } from '@blueprintjs/core'
 
+import { updateSchedule, deleteSchedule, changeSelectedFilter} from '../actions.js'
+import { update, push, remove } from '../immutable_array.js'
+
 const mapStateToProps = (state, ownProps) => {
   let schedule = state.schedulesById[ownProps.params.scheduleId]
   return {
     ...schedule,
     filtersById: state.filtersById,
-    absentFilters: Object.values(state.filtersById).filter(filter => schedule.suggestions.find(x => x.filterId !== filter.id).legnth > 0),
+    selectedFilter: state.ui.selectedFilter,
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+  let id = ownProps.params.scheduleId
   return {
-    onClose: () => window.location.hash = '/schedules',
-    onChange: (attr) => (e) => null,
+    onClose: () => {
+      window.location.hash = '/schedules'
+      dispatch(changeSelectedFilter(""))
+    },
+    onChange: (attr) => (e) => dispatch(updateSchedule(id, {[attr]: e.currentTarget.value})),
+    onChangeSelectedFilter: e => dispatch(changeSelectedFilter(e.currentTarget.value)),
+    setSuggestions: (data) => dispatch(updateSchedule(id, {suggestions: data})),
+    onDelete: () => dispatch(deleteSchedule(id))
   }
 }
 
-const Schedule = ({id, name, suggestions, filtersById, absentFilters, onClose, onChange}) =>
-  <Dialog isOpen={!!id} onClose={onClose} title="Schedule Details">
+const Schedule = ({id, name, suggestions, filtersById, selectedFilter, onClose, onChange, setSuggestions, onChangeSelectedFilter,onDelete}) => {
+  let absentFilters = Object.values(filtersById).filter(f => !suggestions.find(s => s.filterId === f.id))
+
+  return <Dialog isOpen={!!id} onClose={onClose} title="Schedule Details">
     <div className="pt-dialog-body">
       <InputGroup leftIconName='document' placeholder="Schedule Name" value={name} onChange={onChange('name')} />
       <div className="pt-card" style={{marginTop: '1em'}}>
         <h5 style={{marginBottom: '1em'}}>Included Filters</h5>
-        { suggestions.map( s => {
+        { suggestions.map( (s, i) => {
           let filter = filtersById[s.filterId] || {}
           return <div className="pt-control-group" style={{marginTop: '0.5em'}}>
             <Button iconName="drag-handle-horizontal" style={{cursor: '-webkit-grab'}} />
@@ -35,37 +47,37 @@ const Schedule = ({id, name, suggestions, filtersById, absentFilters, onClose, o
             </Tag>
             <InputGroup leftIconName="dollar" placeholder={`${filter.basePrice} list`} className="flex-grow"
               value={s.specialPrice} type="number"
-              step="0.01"
+              step="0.01" onChange={e => setSuggestions(update(suggestions, i, {specialPrice: e.currentTarget.value}))}
               rightElement={
                 s.specialPrice && <Tag className="pt-minimal">${filter.basePrice} list</Tag>
                 }
             />
-            <Button intent={Intent.DANGER} iconName="remove" onClick={() => {}} />
+            <Button intent={Intent.DANGER} iconName="remove" onClick={() => setSuggestions(remove(suggestions, i))} />
           </div>
         }) }
         { absentFilters.length > 0
-          ? <label className="pt-label pt-inline" style={{marginTop: '1em'}}>
-            Add a filter:
-            {" "}
-            <div className="pt-control-group" style={{display: 'inline-block'}}>
+          ? <div className="pt-control-group" style={{marginTop: '1em'}}>
               <div className="pt-select">
-                <select value={1}>
+                <select value={selectedFilter} onChange={onChangeSelectedFilter}>
+                  <option value={ NaN } disabled hidden>Choose a filter</option>
                   {absentFilters.map(filter => <option value={filter.id}>{filter.name}</option>)}
                 </select>
               </div>
-              <Button intent={Intent.SUCCESS} iconName="add" text="Add" />
+              <Button intent={Intent.SUCCESS} iconName="add" text="Add" disabled={selectedFilter === ""}
+                onClick={() => setSuggestions(push(suggestions, {filterId: selectedFilter}))}
+              />
             </div>
-          </label>
           : <p className="pt-text-muted" style={{marginTop: '1em'}}>This schedule contains all filters.</p>}
       </div>
     </div>
     <div className="pt-dialog-footer" style={{display: 'flex', justifyContent: 'space-between'}}>
-      <Button text="Delete" onClick={onClose} intent={Intent.DANGER} />
+      <Button text="Delete" onClick={onDelete} intent={Intent.DANGER} />
       <div className="pt-dialog-footer-actions">
         <Button text="Cancel" onClick={onClose} />
         <Button text="Save" onClick={onClose} intent={Intent.PRIMARY} />
       </div>
     </div>
   </Dialog>
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Schedule)

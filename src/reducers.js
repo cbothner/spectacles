@@ -1,22 +1,22 @@
 import { combineReducers } from 'redux'
-import { ADD_FILTER, UPDATE_FILTER, DELETE_FILTER } from './actions.js'
+import * as A from './actions.js'
 
 function filtersById(state = {}, action) {
   switch (action.type) {
 
-    case ADD_FILTER:
+    case A.ADD_FILTER:
       return {
         ...state,
         [action.id]: {id: action.id},
       }
 
-    case UPDATE_FILTER:
+    case A.UPDATE_FILTER:
       return {
         ...state,
         [action.id]: {...state[action.id], ...action.data},
       }
 
-    case DELETE_FILTER:
+    case A.DELETE_FILTER:
       let newState = {...state}
       delete newState[action.id]
       return newState
@@ -27,11 +27,40 @@ function filtersById(state = {}, action) {
 }
 
 function schedulesById(state = {}, action) {
-  return state
+  switch (action.type) {
+
+    case A.ADD_SCHEDULE:
+      return {
+        ...state,
+        [action.id]: {id: action.id, suggestions: []},
+      }
+
+    case A.UPDATE_SCHEDULE:
+      return {
+        ...state,
+        [action.id]: {...state[action.id], ...action.data},
+      }
+
+    case A.DELETE_SCHEDULE:
+      let newState = {...state}
+      delete newState[action.id]
+      return newState
+
+    default: return state
+  }
 }
 
 function ui(state = {}, action) {
-  return state
+  switch (action.type) {
+
+    case A.CHANGE_SELECTED_FILTER:
+      return {
+      ...state,
+      selectedFilter: parseInt(action.id, 10),
+    }
+
+    default: return state
+  }
 }
 
 const reducer = combineReducers({

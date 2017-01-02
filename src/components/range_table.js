@@ -5,6 +5,8 @@ import { Button, Intent } from '@blueprintjs/core'
 
 import { updateFilter } from '../actions.js'
 
+import { update, push, remove } from '../immutable_array.js'
+
 const mapStateToProps = (state, ownProps) => {
   return {
     items: state.filtersById[ownProps.filterId][ownProps.itemsKey],
@@ -36,19 +38,3 @@ const RangeTable = ({items = [], name, setItems}) =>
 export default connect(mapStateToProps, mapDispatchToProps)(RangeTable)
 
 
-
-function update(items, i, data) {
-  return [
-    ...items.slice(0,i),
-    {...items[i], ...data},
-    ...items.slice(i+1),
-  ]
-}
-
-function push(items, elt) {
-  return [...items, elt]
-}
-
-function remove(items, i) {
-  return [...items.slice(0,i), ...items.slice(i+1)]
-}

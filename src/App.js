@@ -142,7 +142,7 @@ const store = createStore( reducer, {
     },
   },
   ui: {
-    activeView: "Filters",
+    selectedFilter: "",
   },
 })
 

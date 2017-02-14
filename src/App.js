@@ -4,6 +4,7 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 
 import Router from 'react-router/HashRouter'
+import Match from 'react-router/Match'
 
 import "@blueprintjs/core/dist/blueprint.css"
 import './App.css'
@@ -143,6 +144,7 @@ const store = createStore( reducer, {
   },
   ui: {
     selectedFilter: "",
+    filtersToPrint: [1,2],
   },
 })
 
@@ -150,7 +152,7 @@ class App extends Component {
   render() {
     return <Provider store={store} >
       <Router>
-        <Spectacles />
+        <Match pattern="/" component={Spectacles} />
       </Router>
     </Provider>
   }

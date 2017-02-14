@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { NonIdealState } from '@blueprintjs/core'
-import { LineChart, XAxis, YAxis, Legend, Line, Tooltip } from 'recharts'
 
+import SpectrophotometerChart from './spectrophotometer_chart.js'
 import { updateFilter } from '../actions.js'
 
 const mapStateToProps = (state, ownProps) => {
@@ -29,16 +29,7 @@ const SpectrophotometerData = ({data, onChange}) =>
       <textarea style={{flex: 1, height: 200}} value={convertDataToCSV(data)} onChange={onChange} />
       <div style={{flex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
         { data
-          ? <LineChart data={data} width={500} height={200}
-              margin={{top: 5, right: -30, bottom: -5, left: -10}}>
-              <XAxis dataKey="wavelength" type="number" domain={['dataMin', 'dataMax']} tickCount={20} />
-              <YAxis />
-              <YAxis yAxisId={1} orientation="right" />
-              <Legend />
-              <Tooltip />
-              <Line name="OD" dataKey="od" dot={false} type="basis" stroke="#137CBD" strokeWidth="2" />
-              <Line name="%T" dataKey="percentT" yAxisId={1} dot={false} type="basis" stroke="#DB3737" strokeDasharray="4, 4" />
-            </LineChart>
+          ? <SpectrophotometerChart data={data} />
           : <NonIdealState
               title="No Data"
               description="Paste wavelength, OD, and %T data from Excel."

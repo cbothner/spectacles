@@ -6,13 +6,14 @@ import Link from 'react-router/Link'
 import { Button, Intent } from '@blueprintjs/core'
 
 import Filter from './filter.js'
-import FilterPrintouts from './filter_printouts.js'
+import Printout from './printout.js'
+import SingleFilterPrintout from './single_filter_printout.js'
 import PrintPortal from './print_portal.js'
 import { addFilter } from '../actions.js'
 
 const mapStateToProps = (state) => {
   return {
-    filters: Object.values(state.filtersById).sort((a, b) => a.name > b.name),
+    filters: Object.keys(state.filtersById).map( x => state.filtersById[x] ).sort((a, b) => a.name > b.name),
     filtersToPrint: state.ui.filtersToPrint.map(f => state.filtersById[f]),
   }
 }
@@ -46,7 +47,9 @@ const FiltersList = ({ filters = [], pathname, filtersToPrint, onAddFilter }) =>
     </table>
 
     {filtersToPrint.length > 0 && <PrintPortal>
-      <FilterPrintouts filters={filtersToPrint} />
+      <Printout>
+        <SingleFilterPrintout filter={filtersToPrint[0]} />
+      </Printout>
     </PrintPortal>}
 
     <Match pattern={`${pathname}/:filterId`} component={Filter} />

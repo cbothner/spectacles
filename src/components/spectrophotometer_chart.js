@@ -1,9 +1,10 @@
 import React from 'react'
 import { LineChart, XAxis, YAxis, Legend, Line, Tooltip } from 'recharts'
 
-const SpectrophotometerChart = ({data, forPrint}) =>
-  <LineChart data={data} width={500} height={200}
-    margin={{top: 5, right: -30, bottom: -5, left: -10}}>
+const SpectrophotometerChart = ({data, forPrint, printout}) =>
+  <LineChart data={data}
+    width={printout ? 600 : 500} height={printout ? 225 : 200}
+    margin={{top: printout ? 15 : 5, right: -30, bottom: -5, left: printout ? -30 : -10}}>
     <XAxis dataKey="wavelength" type="number" domain={['dataMin', 'dataMax']} tickCount={20} />
     <YAxis />
     <YAxis yAxisId={1} orientation="right" />

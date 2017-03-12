@@ -1,0 +1,20 @@
+body {
+  font-size: 12px;
+  font-family: "Source Sans Pro";
+}
+h1 { font-size: 38px; }
+h2 { font-size: 25px; }
+h3 { font-size: 22px; }
+h4 { font-size: 18px; }
+h5 { font-size: 15px; }
+h6 { font-size: 13px; }
+
+table.pt-table {
+  border-spacing: 0;
+  font-size: 12px;
+}
+
+table.pt-table tbody tr:first-child td {
+  box-shadow: none;
+  border-top: 1px solid #d6d9dc;
+}

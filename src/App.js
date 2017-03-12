@@ -128,8 +128,14 @@ const store = createStore( reducer, {
     },
     2: {
       id: 2,
-      name: "YAG",
-      basePrice: 100,
+      name: "CO2",
+      basePrice: 45,
+      color: 'clear',
+      vlt: 93,
+      ods: [
+        {range: '190–360', value: '5+'},
+        {range: '10600', value: '5+'},
+      ],
     },
   },
   schedulesById: {

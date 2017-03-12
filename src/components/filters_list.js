@@ -7,7 +7,7 @@ import { Button, Intent } from '@blueprintjs/core'
 
 import Filter from './filter.js'
 import Printout from './printout.js'
-import SingleFilterPrintout from './single_filter_printout.js'
+import MultiFilterPrintout from './multi_filter_printout.js'
 import PrintPortal from './print_portal.js'
 import { addFilter } from '../actions.js'
 
@@ -48,7 +48,7 @@ const FiltersList = ({ filters = [], pathname, filtersToPrint, onAddFilter }) =>
 
     {filtersToPrint.length > 0 && <PrintPortal>
       <Printout>
-        <SingleFilterPrintout filter={filtersToPrint[0]} />
+        <MultiFilterPrintout filters={filtersToPrint} />
       </Printout>
     </PrintPortal>}
 

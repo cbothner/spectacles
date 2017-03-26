@@ -36,7 +36,7 @@ class PrintPortal extends React.Component {
     setTimeout(() => {
       x.contentWindow.print()
       document.body.removeChild(x)
-    }, 500)
+    }, 50)
   }
 
   render() {

@@ -1,15 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Dialog, Button, InputGroup, Tag, Intent } from '@blueprintjs/core'
+import Match from 'react-router/Match'
+import { Dialog, AnchorButton, Button, InputGroup, Tag, Intent } from '@blueprintjs/core'
 
 import { updateSchedule, deleteSchedule, changeSelectedFilter} from '../actions.js'
 import { update, push, remove } from '../immutable_array.js'
 
+import Printout from './printout.js'
+import SchedulePrintout from './schedule_printout.js'
+import PrintPortal from './print_portal.js'
+
 const mapStateToProps = (state, ownProps) => {
   let schedule = state.schedulesById[ownProps.params.scheduleId]
   return {
-    ...schedule,
+    schedule,
     filtersById: state.filtersById,
     selectedFilter: state.ui.selectedFilter,
   }
@@ -29,7 +34,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const Schedule = ({id, name, suggestions, filtersById, selectedFilter, onClose, onChange, setSuggestions, onChangeSelectedFilter,onDelete}) => {
+const Schedule = ({schedule, filtersById, selectedFilter, onClose, onChange, setSuggestions, onChangeSelectedFilter, onDelete, pathname}) => {
+  let { id, name, suggestions } = schedule
   let absentFilters = Object.values(filtersById).filter(f => !suggestions.find(s => s.filterId === f.id))
 
   return <Dialog isOpen={!!id} onClose={onClose} title="Schedule Details">
@@ -39,7 +45,7 @@ const Schedule = ({id, name, suggestions, filtersById, selectedFilter, onClose, 
         <h5 style={{marginBottom: '1em'}}>Included Filters</h5>
         { suggestions.map( (s, i) => {
           let filter = filtersById[s.filterId] || {}
-          return <div className="pt-control-group" style={{marginTop: '0.5em'}}>
+          return <div className="pt-control-group" style={{marginTop: '0.5em'}} key={s.filterId}>
             <Button iconName="drag-handle-horizontal" style={{cursor: '-webkit-grab'}} />
             <Tag className="pt-large pt-minimal"
                 style={{borderRadius: 0, padding: '4px 10px', border: '1px solid rgba(16, 22, 26, 0.1)'}}>
@@ -70,13 +76,23 @@ const Schedule = ({id, name, suggestions, filtersById, selectedFilter, onClose, 
           : <p className="pt-text-muted" style={{marginTop: '1em'}}>This schedule contains all filters.</p>}
       </div>
     </div>
+
     <div className="pt-dialog-footer" style={{display: 'flex', justifyContent: 'space-between'}}>
-      <Button text="Delete" onClick={onDelete} intent={Intent.DANGER} />
+      <div className="pt-dialog-footer-actions">
+        <AnchorButton text="Print" href={`#${pathname}/print`} iconName='print' />
+        <Button text="Delete" onClick={onDelete} intent={Intent.DANGER} iconName='trash' />
+      </div>
       <div className="pt-dialog-footer-actions">
         <Button text="Cancel" onClick={onClose} />
         <Button text="Save" onClick={onClose} intent={Intent.PRIMARY} />
       </div>
     </div>
+
+    <Match pattern={`${pathname}/print`} render={() => <PrintPortal>
+        <Printout>
+          <SchedulePrintout schedule={schedule} filtersById={filtersById} />
+        </Printout>
+    </PrintPortal>} />
   </Dialog>
 }
 

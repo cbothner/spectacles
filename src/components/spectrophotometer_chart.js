@@ -5,7 +5,7 @@ const SpectrophotometerChart = ({data, forPrint, center, width=500, height=200})
   <LineChart data={data}
     width={width} height={height}
     margin={{top: center ? 15 : 5, right: -30, bottom: -5, left: center ? -30 : -10}}>
-    <XAxis dataKey="wavelength" type="number" domain={['dataMin', 'dataMax']} tickCount={20} />
+    <XAxis dataKey="wavelength" type="number" domain={['dataMin', 'dataMax']} tickCount={16} />
     <YAxis />
     <YAxis yAxisId={1} orientation="right" />
     <Legend />

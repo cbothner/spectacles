@@ -1,10 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Dialog, Button, InputGroup, Tag, Intent } from '@blueprintjs/core'
+import Match from 'react-router/Match'
+import { Dialog, AnchorButton, Button, InputGroup, Tag, Intent } from '@blueprintjs/core'
 
 import SpectrophotometerData from './spectrophotometer_data.js'
 import RangeTable from './range_table.js'
+import Printout from './printout.js'
+import SingleFilterPrintout from './single_filter_printout.js'
+import PrintPortal from './print_portal.js'
 
 import { updateFilter, deleteFilter } from '../actions.js'
 
@@ -25,9 +29,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const Filter = ({ id, name, ce, basePrice, color, vlt, ods, lRatings, onClose,
-                  onChange, onToggleCE, onDelete }) =>
-  <Dialog isOpen={!!id} onClose={onClose} title="Filter Details"
+const Filter = (props) => {
+  const { id, name, ce, basePrice, color, vlt, onClose,
+    onChange, onToggleCE, onDelete, pathname } = props
+
+  return <Dialog isOpen={!!id} onClose={onClose} title="Filter Details"
       style={{width: 763, top: '15%'}}>
     <div className="pt-dialog-body">
 
@@ -66,12 +72,22 @@ const Filter = ({ id, name, ce, basePrice, color, vlt, ods, lRatings, onClose,
     </div>
     <div className="pt-dialog-footer" style={{display: 'flex',
         justifyContent: 'space-between'}}>
-      <Button text="Delete" onClick={onDelete} intent={Intent.DANGER} />
+      <div className="pt-dialog-footer-actions">
+        <AnchorButton text="Print" href={`#${pathname}/print`} iconName='print' />
+        <Button text="Delete" onClick={onDelete} intent={Intent.DANGER} iconName='trash' />
+      </div>
       <div className="pt-dialog-footer-actions">
         <Button text="Cancel" onClick={onClose} />
         <Button text="Save" onClick={onClose} intent={Intent.PRIMARY} />
       </div>
     </div>
+
+    <Match pattern={`${pathname}/print`} render={() => <PrintPortal>
+        <Printout>
+          <SingleFilterPrintout filter={props} />
+        </Printout>
+    </PrintPortal>} />
   </Dialog>
+  }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filter)

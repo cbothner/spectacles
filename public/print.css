@@ -23,3 +23,17 @@ table.pt-table tbody tr:first-child td {
   box-shadow: none;
   border: 1px solid rgb(210, 214, 217);
 }
+
+table.pt-table.pt-condensed th, table.pt-table.pt-condensed td {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  line-height: 1.1;
+}
+
+table.pt-table.pt-condensed th:last-child {
+  padding-bottom: 4px;
+}
+
+table.pt-table.pt-condensed td:first-child {
+  padding-top: 4px;
+}

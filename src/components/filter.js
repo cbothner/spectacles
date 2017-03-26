@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Route } from 'react-router-dom'
 
-import Match from 'react-router/Match'
 import { Dialog, AnchorButton, Button, InputGroup, Tag, Intent } from '@blueprintjs/core'
 
 import SpectrophotometerData from './spectrophotometer_data.js'
@@ -12,26 +12,26 @@ import PrintPortal from './print_portal.js'
 
 import { updateFilter, deleteFilter } from '../actions.js'
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state, {match}) => {
   return {
-    ...state.filtersById[ownProps.params.filterId],
+    ...state.filtersById[match.params.filterId],
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  let id = ownProps.params.filterId
+const mapDispatchToProps = (dispatch, {history, match}) => {
+  let id = match.params.filterId
   return {
-    onClose: () => window.location.hash = '/filters',
+    onClose: () => history.replace('/filters'),
     onChange: (attr) => (e) =>
         dispatch(updateFilter(id, {[attr]: e.currentTarget.value})),
     onToggleCE: (val) => dispatch(updateFilter(id, {ce: val})),
-    onDelete: () => dispatch(deleteFilter(id)),
+    onDelete: () => dispatch(deleteFilter(id, history)),
   }
 }
 
 const Filter = (props) => {
   const { id, name, ce, basePrice, color, vlt, onClose,
-    onChange, onToggleCE, onDelete, pathname } = props
+    onChange, onToggleCE, onDelete, match, history } = props
 
   return <Dialog isOpen={!!id} onClose={onClose} title="Filter Details"
       style={{width: 763, top: '15%'}}>
@@ -73,7 +73,7 @@ const Filter = (props) => {
     <div className="pt-dialog-footer" style={{display: 'flex',
         justifyContent: 'space-between'}}>
       <div className="pt-dialog-footer-actions">
-        <AnchorButton text="Print" href={`#${pathname}/print`} iconName='print' />
+        <AnchorButton text="Print" onClick={() => history.replace(`${match.url}/print`)} iconName='print' />
         <Button text="Delete" onClick={onDelete} intent={Intent.DANGER} iconName='trash' />
       </div>
       <div className="pt-dialog-footer-actions">
@@ -82,7 +82,7 @@ const Filter = (props) => {
       </div>
     </div>
 
-    <Match pattern={`${pathname}/print`} render={() => <PrintPortal>
+    <Route path={`${match.url}/print`} render={() => <PrintPortal>
         <Printout>
           <SingleFilterPrintout filter={props} />
         </Printout>

@@ -3,8 +3,7 @@ import React, { Component } from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 
-import Router from 'react-router/HashRouter'
-import Match from 'react-router/Match'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import "@blueprintjs/core/dist/blueprint.css"
 import './App.css'
@@ -158,7 +157,7 @@ class App extends Component {
   render() {
     return <Provider store={store} >
       <Router>
-        <Match pattern="/" component={Spectacles} />
+        <Route path="/" component={Spectacles} />
       </Router>
     </Provider>
   }

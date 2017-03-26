@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Match from 'react-router/Match'
-import Link from 'react-router/Link'
+import { Route } from 'react-router-dom'
 
 import { Button, Intent, Tag } from '@blueprintjs/core'
 
@@ -14,13 +13,13 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, {history}) => {
   return {
-    onAddSchedule: () => dispatch(addSchedule())
+    onAddSchedule: () => dispatch(addSchedule(history))
   }
 }
 
-const SchedulesList = ({schedules, pathname, onAddSchedule}) => {
+const SchedulesList = ({schedules, match, onAddSchedule}) => {
   return <article style={{marginTop: "2em"}}>
     <div style={{display: 'flex', justifyContent: 'space-between'}}>
       <h4>Specification Schedules</h4>
@@ -40,7 +39,7 @@ const SchedulesList = ({schedules, pathname, onAddSchedule}) => {
       </tbody>
     </table>
 
-    <Match pattern={`${pathname}/:scheduleId`} component={Schedule} />
+    <Route path={`${match.url}/:scheduleId`} component={Schedule} />
   </article>
 }
 
@@ -54,9 +53,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(SchedulesList)
 
 
 const SchedulesListEntry = ({id, name = "—", suggestions = []}) => {
-  return <Link to={`/schedules/${id}`}>{
-    ({onClick}) =>
-      <tr onClick={onClick}>
+  return <Route>
+    {
+      ({history, match}) =>
+      <tr onClick={() => history.replace(`${match.url}/${id}`)}>
         <td>{name}</td>
         <td>
           {suggestions.map((suggestion) => {
@@ -65,7 +65,7 @@ const SchedulesListEntry = ({id, name = "—", suggestions = []}) => {
         </td>
       </tr>
     }
-  </Link>
+  </Route>
 }
 
 SchedulesListEntry.propTypes = {

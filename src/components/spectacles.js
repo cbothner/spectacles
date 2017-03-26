@@ -1,7 +1,5 @@
 import React from 'react'
-import Match from 'react-router/Match'
-import Link from 'react-router/Link'
-import Redirect from 'react-router/Redirect'
+import { Switch, Route, NavLink, Redirect } from 'react-router-dom'
 
 import VisibleSchedulesList from './schedules_list.js'
 import VisibleFiltersList from './filters_list.js'
@@ -14,8 +12,8 @@ const Spectacles = () => {
         <div className="pt-navbar-heading">Spectacles</div>
         <span className="pt-navbar-divider"></span>
 
-        <Link to="/schedules" className="pt-button pt-minimal pt-icon-document" activeClassName="pt-active">Schedules</Link>
-        <Link to="/filters" className="pt-button pt-minimal pt-icon-flash" activeClassName="pt-active">Filters</Link>
+        <NavLink to="/schedules" className="pt-button pt-minimal pt-icon-document" activeClassName="pt-active">Schedules</NavLink>
+        <NavLink to="/filters" className="pt-button pt-minimal pt-icon-flash" activeClassName="pt-active">Filters</NavLink>
 
       </div>
       <div className="pt-navbar-group pt-align-right">
@@ -23,9 +21,11 @@ const Spectacles = () => {
       </div>
     </nav>
 
-    <Match exactly pattern="/" render={() => <Redirect to="/filters" />} />
-    <Match pattern="/filters" component={VisibleFiltersList} />
-    <Match pattern="/schedules" component={VisibleSchedulesList} />
+    <Switch>
+      <Route path="/filters" component={VisibleFiltersList} />
+      <Route path="/schedules" component={VisibleSchedulesList} />
+      <Redirect to="/filters" />
+    </Switch>
 
   </main>
 }

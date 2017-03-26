@@ -26,7 +26,7 @@ class PrintPortal extends React.Component {
     link.rel = "stylesheet"
     link.type = "text/css"
     link.media = "print"
-    link.href = "//localhost:3001/print.css"
+    link.href = "/print.css"
     idoc.head.appendChild(link)
 
     var div = idoc.createElement('div')

@@ -1,7 +1,9 @@
 {
   "name": "spectacles",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "description": "Manage and generate specification sheets for laser glasses",
+  "license": "MIT",
   "devDependencies": {
     "react-scripts": "0.8.4"
   },
@@ -9,9 +11,10 @@
     "@blueprintjs/core": "^1.4.0",
     "react": "^15.4.1",
     "react-addons-css-transition-group": "^15.4.1",
+    "react-addons-transition-group": "^15.4.2",
     "react-dom": "^15.4.1",
     "react-redux": "^5.0.1",
-    "react-router": "^4.0.0-alpha.6",
+    "react-router-dom": "^4.0.0",
     "recharts": "^0.20.1",
     "redux": "^3.6.0"
   },

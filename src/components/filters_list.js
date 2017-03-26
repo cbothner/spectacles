@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Match from 'react-router/Match'
-import Link from 'react-router/Link'
+import { Route } from 'react-router-dom'
 
 import { Button, Intent } from '@blueprintjs/core'
 
@@ -14,13 +13,13 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, {history}) => {
   return {
-    onAddFilter: () => dispatch(addFilter())
+    onAddFilter: () => dispatch(addFilter(history))
   }
 }
 
-const FiltersList = ({ filters = [], pathname, filtersToPrint, onAddFilter }) => {
+const FiltersList = ({ filters = [], match, filtersToPrint, onAddFilter }) => {
   return <article style={{marginTop: "2em"}}>
     <div style={{display: 'flex', justifyContent: 'space-between'}}>
       <h4>Filter Specifications</h4>
@@ -42,7 +41,7 @@ const FiltersList = ({ filters = [], pathname, filtersToPrint, onAddFilter }) =>
       </tbody>
     </table>
 
-    <Match pattern={`${pathname}/:filterId`} component={Filter} />
+    <Route path={`${match.url}/:filterId`} component={Filter} />
   </article>
 }
 
@@ -56,9 +55,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(FiltersList)
 
 
 const FiltersListEntry = ({id, name, ce, vlt, color, basePrice, ods, lRatings}) => {
-  return <Link to={`/filters/${id}`}>{
-    ({ onClick}) =>
-      <tr onClick={onClick}>
+  return <Route>
+    {
+      ({ history, match}) =>
+      <tr onClick={() => history.replace(`${match.url}/${id}`)}>
         <td><span className="pt-tag pt-minimal">{name || '—'}</span></td>
         <td>{ce ? "Certified" : "Pending"}</td>
         <td>{`${vlt || '—'}% ${color || '—'}`}</td>
@@ -66,7 +66,8 @@ const FiltersListEntry = ({id, name, ce, vlt, color, basePrice, ods, lRatings}) 
         <td><RangeList items={ods} /></td>
         <td><RangeList items={lRatings} /></td>
       </tr>
-  }</Link>
+    }
+  </Route>
 }
 
 const RangeList = ({ items = [] }) => {

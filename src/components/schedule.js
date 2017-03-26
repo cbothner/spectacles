@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Route } from 'react-router-dom'
 
-import Match from 'react-router/Match'
 import { Dialog, AnchorButton, Button, InputGroup, Tag, Intent } from '@blueprintjs/core'
 
 import { updateSchedule, deleteSchedule, changeSelectedFilter} from '../actions.js'
@@ -11,8 +11,8 @@ import Printout from './printout.js'
 import SchedulePrintout from './schedule_printout.js'
 import PrintPortal from './print_portal.js'
 
-const mapStateToProps = (state, ownProps) => {
-  let schedule = state.schedulesById[ownProps.params.scheduleId]
+const mapStateToProps = (state, {match}) => {
+  let schedule = state.schedulesById[match.params.scheduleId]
   return {
     schedule,
     filtersById: state.filtersById,
@@ -20,21 +20,21 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  let id = ownProps.params.scheduleId
+const mapDispatchToProps = (dispatch, {match, history}) => {
+  let id = match.params.scheduleId
   return {
     onClose: () => {
-      window.location.hash = '/schedules'
+      history.replace('/schedules')
       dispatch(changeSelectedFilter(""))
     },
     onChange: (attr) => (e) => dispatch(updateSchedule(id, {[attr]: e.currentTarget.value})),
     onChangeSelectedFilter: e => dispatch(changeSelectedFilter(e.currentTarget.value)),
     setSuggestions: (data) => dispatch(updateSchedule(id, {suggestions: data})),
-    onDelete: () => dispatch(deleteSchedule(id))
+    onDelete: () => dispatch(deleteSchedule(id, history))
   }
 }
 
-const Schedule = ({schedule, filtersById, selectedFilter, onClose, onChange, setSuggestions, onChangeSelectedFilter, onDelete, pathname}) => {
+const Schedule = ({schedule, filtersById, selectedFilter, onClose, onChange, setSuggestions, onChangeSelectedFilter, onDelete, match, history}) => {
   let { id, name, suggestions } = schedule
   let absentFilters = Object.values(filtersById).filter(f => !suggestions.find(s => s.filterId === f.id))
 
@@ -79,7 +79,7 @@ const Schedule = ({schedule, filtersById, selectedFilter, onClose, onChange, set
 
     <div className="pt-dialog-footer" style={{display: 'flex', justifyContent: 'space-between'}}>
       <div className="pt-dialog-footer-actions">
-        <AnchorButton text="Print" href={`#${pathname}/print`} iconName='print' />
+        <AnchorButton text="Print" onClick={() => history.replace(`${match.url}/print`)} iconName='print' />
         <Button text="Delete" onClick={onDelete} intent={Intent.DANGER} iconName='trash' />
       </div>
       <div className="pt-dialog-footer-actions">
@@ -88,7 +88,7 @@ const Schedule = ({schedule, filtersById, selectedFilter, onClose, onChange, set
       </div>
     </div>
 
-    <Match pattern={`${pathname}/print`} render={() => <PrintPortal>
+    <Route path={`${match.url}/print`} render={() => <PrintPortal>
         <Printout>
           <SchedulePrintout schedule={schedule} filtersById={filtersById} />
         </Printout>

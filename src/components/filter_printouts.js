@@ -27,7 +27,7 @@ const FilterPrintouts = ({filters}) => <main>
         } />
       </div>
       <div style={{flex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-        <SpectrophotometerChart data={filter.spectrophotometerData} />
+        <SpectrophotometerChart forPrint data={filter.spectrophotometerData} />
       </div>
     </div>
   </div>)}

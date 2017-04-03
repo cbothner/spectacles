@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  filter: one
+  schedule: one
+  position: 1
+  special_price: 
+  special_price: 
+
+two:
+  filter: two
+  schedule: two
+  position: 1
+  special_price: 
+  special_price: 

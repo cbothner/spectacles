@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  ce: false
+  base_price: 
+  base_price: 
+  color: MyText
+  vlt: 1
+  spectrophotometer_data: 
+  l_ratings: 
+  ods: 
+
+two:
+  name: MyString
+  ce: false
+  base_price: 
+  base_price: 
+  color: MyText
+  vlt: 1
+  spectrophotometer_data: 
+  l_ratings: 
+  ods: 

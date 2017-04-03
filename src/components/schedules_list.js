@@ -9,7 +9,8 @@ import { addSchedule } from '../actions.js'
 
 const mapStateToProps = (state) => {
   return {
-    schedules: Object.values(state.schedulesById)
+    schedules: Object.keys(state.schedulesById)
+      .map( x => state.schedulesById[x]),
   }
 }
 

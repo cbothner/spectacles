@@ -4,6 +4,9 @@ import * as A from './actions.js'
 function filtersById(state = {}, action) {
   switch (action.type) {
 
+    case A.SET_FILTERS:
+      return action.filters
+
     case A.ADD_FILTER:
       return {
         ...state,
@@ -29,6 +32,9 @@ function filtersById(state = {}, action) {
 function schedulesById(state = {}, action) {
   switch (action.type) {
 
+    case A.SET_SCHEDULES:
+      return action.schedules
+
     case A.ADD_SCHEDULE:
       return {
         ...state,
@@ -50,7 +56,9 @@ function schedulesById(state = {}, action) {
   }
 }
 
-function ui(state = {}, action) {
+function ui(state, action) {
+  if (typeof state === 'undefined')  return { selectedFilter: NaN };
+
   switch (action.type) {
 
     case A.CHANGE_SELECTED_FILTER:

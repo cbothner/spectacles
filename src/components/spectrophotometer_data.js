@@ -43,14 +43,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(SpectrophotometerDat
 
 
 function convertDataToCSV(data = []) {
-  return data.map((row) => `${row.wavelength},${row.od},${row.percentT}`).join('\n')
+  return data.map((row) => `${row.wavelength},${row.od},${row.transmittance}`).join('\n')
 }
 
 function convertCSVToData(csv) {
   return csv.split('\n').map((row) => {
     let x = row.split(/[, \t]+/)
     return x.length === 3 && !isNaN(x[0])
-      ? { wavelength: parseInt(x[0], 10), od: parseFloat(x[1]), percentT: parseFloat(x[2]) }
+      ? { wavelength: parseInt(x[0], 10), od: parseFloat(x[1]), transmittance: parseFloat(x[2]) }
       : null
   }).filter(x => x)
 }

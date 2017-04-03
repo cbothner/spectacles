@@ -13,3 +13,18 @@ build
 .DS_Store
 .env
 npm-debug.log
+
+# Ignore bundler config.
+/.bundle
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore Byebug command history file.
+.byebug_history
+
+# Ignore vagrant box files
+.vagrant

@@ -10,52 +10,58 @@ import Printout from './printout.js'
 import SingleFilterPrintout from './single_filter_printout.js'
 import PrintPortal from './print_portal.js'
 
-import { updateFilter, deleteFilter } from '../actions.js'
+import { updateFilter, saveFilter, deleteFilter } from '../actions.js'
 
-const mapStateToProps = (state, {match}) => {
+function mapStateToProps(state, {match}) {
   return {
-    ...state.filtersById[match.params.filterId],
-  }
+    filter: state.filtersById[match.params.filterId],
+  };
 }
 
-const mapDispatchToProps = (dispatch, {history, match}) => {
-  let id = match.params.filterId
+function mapDispatchToProps(dispatch, {history, match}) {
+  let id = match.params.filterId;
+  const handleClose = () => history.replace('/filters');
   return {
-    onClose: () => history.replace('/filters'),
-    onChange: (attr) => (e) =>
+    handleChange: (attr) => (e) =>
         dispatch(updateFilter(id, {[attr]: e.currentTarget.value})),
-    onToggleCE: (val) => dispatch(updateFilter(id, {ce: val})),
-    onDelete: () => dispatch(deleteFilter(id, history)),
-  }
+    handleToggleCE: (val) => dispatch(updateFilter(id, {ce: val})),
+    handleDelete: () => dispatch(deleteFilter(id, history)),
+    handleSave: (data) => {
+      dispatch(saveFilter(id, data));
+      handleClose();
+    },
+    handleClose,
+  };
 }
 
-const Filter = (props) => {
-  const { id, name, ce, basePrice, color, vlt, onClose,
-    onChange, onToggleCE, onDelete, match, history } = props
+function Filter(props) {
+  const { filter, match, history, handleClose, handleChange, handleToggleCE,
+  handleDelete, handleSave } = props
+  const { id, name, ce, basePrice, color, vlt } = filter
 
-  return <Dialog isOpen={!!id} onClose={onClose} title="Filter Details"
+  return <Dialog isOpen={!!id} onClose={handleClose} title="Filter Details"
       style={{width: 763, top: '15%'}}>
     <div className="pt-dialog-body">
 
       <div className="pt-control-group">
         <InputGroup leftIconName='flash' placeholder="Name" value={name}
-          onChange={onChange('name')}
+          onChange={handleChange('name')}
           rightElement={
             <Button
               iconName={ce ? 'tick' : 'time'}
               text={ce ? "EN207 Certified" : "EN207 Pending"}
               className="pt-minimal"
-              onClick={() => onToggleCE(!ce)}
+              onClick={() => handleToggleCE(!ce)}
             />
           }
         />
         <InputGroup leftIconName='dollar' placeholder="Base Price"
-          value={basePrice} onChange={onChange('basePrice')} type="number"
+          value={basePrice} onChange={handleChange('basePrice')} type="number"
           step="0.01"/>
         <InputGroup leftIconName='tint' placeholder="Color" value={color}
-          onChange={onChange('color')} />
+          onChange={handleChange('color')} />
         <InputGroup leftIconName='resolve' placeholder="VLT" value={vlt}
-          onChange={onChange('vlt')} type="number"
+          onChange={handleChange('vlt')} type="number"
           rightElement={
           <Tag className="pt-minimal">%</Tag>
         } />
@@ -73,18 +79,31 @@ const Filter = (props) => {
     <div className="pt-dialog-footer" style={{display: 'flex',
         justifyContent: 'space-between'}}>
       <div className="pt-dialog-footer-actions">
-        <AnchorButton text="Print" onClick={() => history.replace(`${match.url}/print`)} iconName='print' />
-        <Button text="Delete" onClick={onDelete} intent={Intent.DANGER} iconName='trash' />
+        <AnchorButton
+          text="Print"
+          onClick={() => history.replace(`${match.url}/print`)}
+          iconName='print'
+        />
+        <Button
+          text="Delete"
+          onClick={handleDelete}
+          intent={Intent.DANGER}
+          iconName='trash'
+        />
       </div>
       <div className="pt-dialog-footer-actions">
-        <Button text="Cancel" onClick={onClose} />
-        <Button text="Save" onClick={onClose} intent={Intent.PRIMARY} />
+        <Button text="Cancel" onClick={handleClose} />
+        <Button
+          text="Save"
+          onClick={() => handleSave(filter)}
+          intent={Intent.PRIMARY}
+        />
       </div>
     </div>
 
     <Route path={`${match.url}/print`} render={() => <PrintPortal>
         <Printout>
-          <SingleFilterPrintout filter={props} />
+          <SingleFilterPrintout filter={filter} />
         </Printout>
     </PrintPortal>} />
   </Dialog>

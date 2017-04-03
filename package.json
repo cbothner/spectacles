@@ -5,6 +5,11 @@
   "description": "Manage and generate specification sheets for laser glasses",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.3",
     "react-scripts": "0.8.4"
   },
   "dependencies": {
@@ -16,12 +21,15 @@
     "react-redux": "^5.0.1",
     "react-router-dom": "^4.0.0",
     "recharts": "^0.20.1",
-    "redux": "^3.6.0"
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0",
+    "serve": "^5.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "proxy": "http://localhost:3001"
 }

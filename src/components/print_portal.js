@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import { withRouter } from 'react-router-dom'
+
 class PrintPortal extends React.Component {
   componentDidMount() {
     var x = document.createElement("iframe")
@@ -36,6 +38,10 @@ class PrintPortal extends React.Component {
     setTimeout(() => {
       x.contentWindow.print()
       document.body.removeChild(x)
+
+      const { location, history } = this.props
+      const match = location.pathname.match(/\/print$/)
+      if (match)  history.replace(location.pathname.substring(0, match.index))
     }, 50)
   }
 
@@ -44,4 +50,4 @@ class PrintPortal extends React.Component {
   }
 }
 
-export default PrintPortal
+export default withRouter(PrintPortal)

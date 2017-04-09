@@ -10,7 +10,12 @@ import Printout from './printout.js'
 import SingleFilterPrintout from './single_filter_printout.js'
 import PrintPortal from './print_portal.js'
 
-import { updateFilter, saveFilter, deleteFilter } from '../actions.js'
+import {
+  getFilters,
+  updateFilter,
+  saveFilter,
+  deleteFilter
+} from '../actions.js'
 
 function mapStateToProps(state, {match}) {
   return {
@@ -20,93 +25,137 @@ function mapStateToProps(state, {match}) {
 
 function mapDispatchToProps(dispatch, {history, match}) {
   let id = match.params.filterId;
-  const handleClose = () => history.replace('/filters');
+  const close = () => history.replace('/filters');
   return {
-    handleChange: (attr) => (e) =>
-        dispatch(updateFilter(id, {[attr]: e.currentTarget.value})),
-    handleToggleCE: (val) => dispatch(updateFilter(id, {ce: val})),
+    handleChange: attr => e => dispatch(updateFilter(
+      id,
+      {[attr]: e.currentTarget.value}
+    )),
+    handleToggleCE: val => dispatch(updateFilter(id, {ce: val})),
     handleDelete: () => dispatch(deleteFilter(id, history)),
-    handleSave: (data) => {
+    handleSave: data => {
       dispatch(saveFilter(id, data));
-      handleClose();
+      close();
     },
-    handleClose,
+    handleCancel: () => {
+      dispatch(getFilters());
+      close();
+    },
   };
 }
 
-function Filter(props) {
-  const { filter, match, history, handleClose, handleChange, handleToggleCE,
-  handleDelete, handleSave } = props
+function Filter({
+    filter,
+    match,
+    history,
+    handleChange,
+    handleToggleCE,
+    handleDelete,
+    handleSave,
+    handleCancel,
+  }) {
   const { id, name, ce, basePrice, color, vlt } = filter
 
-  return <Dialog isOpen={!!id} onClose={handleClose} title="Filter Details"
-      style={{width: 763, top: '15%'}}>
-    <div className="pt-dialog-body">
+  return (
+    <Dialog
+      isOpen={!!id}
+      onClose={handleCancel}
+      title="Filter Details"
+      style={{width: 763, top: '15%'}}
+    >
+      <div className="pt-dialog-body">
 
-      <div className="pt-control-group">
-        <InputGroup leftIconName='flash' placeholder="Name" value={name}
-          onChange={handleChange('name')}
-          rightElement={
-            <Button
-              iconName={ce ? 'tick' : 'time'}
-              text={ce ? "EN207 Certified" : "EN207 Pending"}
-              className="pt-minimal"
-              onClick={() => handleToggleCE(!ce)}
+        <div className="pt-control-group">
+          <InputGroup
+            leftIconName='flash'
+            placeholder="Name"
+            value={name}
+            onChange={handleChange('name')}
+            rightElement={
+              <Button
+                iconName={ce ? 'tick' : 'time'}
+                text={ce ? "EN207 Certified" : "EN207 Pending"}
+                className="pt-minimal"
+                onClick={() => handleToggleCE(!ce)}
+              />
+            }
+          />
+          <InputGroup
+            leftIconName='dollar'
+            placeholder="Base Price"
+            value={basePrice}
+            onChange={handleChange('basePrice')}
+            type="number"
+            step="0.01"
+          />
+          <InputGroup
+            leftIconName='tint'
+            placeholder="Color"
+            value={color}
+            onChange={handleChange('color')}
+          />
+          <InputGroup
+            leftIconName='resolve'
+            placeholder="VLT"
+            value={vlt}
+            onChange={handleChange('vlt')}
+            type="number"
+            rightElement={
+              <Tag className="pt-minimal">%</Tag>
+            } />
+          </div>
+
+          <SpectrophotometerData id={id} />
+
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginTop: '1em'
+            }}
+          >
+            <RangeTable filterId={id} name="OD Ratings" itemsKey="ods" />
+            <RangeTable filterId={id} name="L-Ratings" itemsKey="lRatings" />
+          </div>
+
+        </div>
+        <div
+          className="pt-dialog-footer"
+          style={{display: 'flex', justifyContent: 'space-between'}}
+        >
+          <div className="pt-dialog-footer-actions">
+            <AnchorButton
+              text="Print"
+              onClick={() => history.replace(`${match.url}/print`)}
+              iconName='print'
             />
-          }
-        />
-        <InputGroup leftIconName='dollar' placeholder="Base Price"
-          value={basePrice} onChange={handleChange('basePrice')} type="number"
-          step="0.01"/>
-        <InputGroup leftIconName='tint' placeholder="Color" value={color}
-          onChange={handleChange('color')} />
-        <InputGroup leftIconName='resolve' placeholder="VLT" value={vlt}
-          onChange={handleChange('vlt')} type="number"
-          rightElement={
-          <Tag className="pt-minimal">%</Tag>
-        } />
-      </div>
+            <Button
+              text="Delete"
+              onClick={handleDelete}
+              intent={Intent.DANGER}
+              iconName='trash'
+            />
+          </div>
+          <div className="pt-dialog-footer-actions">
+            <Button text="Cancel" onClick={handleCancel} />
+            <Button
+              text="Save"
+              onClick={() => handleSave(filter)}
+              intent={Intent.PRIMARY}
+            />
+          </div>
+        </div>
 
-      <SpectrophotometerData id={id} />
-
-      <div style={{ display: 'flex', justifyContent: 'space-between',
-          marginTop: '1em' }}>
-        <RangeTable filterId={id} name="OD Ratings" itemsKey="ods" />
-        <RangeTable filterId={id} name="L-Ratings" itemsKey="lRatings" />
-      </div>
-
-    </div>
-    <div className="pt-dialog-footer" style={{display: 'flex',
-        justifyContent: 'space-between'}}>
-      <div className="pt-dialog-footer-actions">
-        <AnchorButton
-          text="Print"
-          onClick={() => history.replace(`${match.url}/print`)}
-          iconName='print'
-        />
-        <Button
-          text="Delete"
-          onClick={handleDelete}
-          intent={Intent.DANGER}
-          iconName='trash'
-        />
-      </div>
-      <div className="pt-dialog-footer-actions">
-        <Button text="Cancel" onClick={handleClose} />
-        <Button
-          text="Save"
-          onClick={() => handleSave(filter)}
-          intent={Intent.PRIMARY}
-        />
-      </div>
-    </div>
-
-    <Route path={`${match.url}/print`} render={() => <PrintPortal>
-        <Printout>
-          <SingleFilterPrintout filter={filter} />
-        </Printout>
-    </PrintPortal>} />
-  </Dialog>
-  }
+        <Route path={`${match.url}/print`} render={() => (
+          <PrintPortal>
+            <Printout>
+              <SingleFilterPrintout filter={filter} />
+            </Printout>
+          </PrintPortal>
+        )}
+      />
+    </Dialog>
+  );
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filter)

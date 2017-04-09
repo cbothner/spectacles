@@ -45,7 +45,7 @@ function mapDispatchToProps(dispatch, {history, match}) {
 }
 
 function Filter({
-    filter,
+    filter = {},
     match,
     history,
     handleChange,

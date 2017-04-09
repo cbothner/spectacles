@@ -63,7 +63,7 @@ function mapDispatchToProps(dispatch, {match, history}) {
 }
 
 function Schedule({
-  schedule,
+  schedule = {},
   filtersById,
   selectedFilter,
   handleCancel,
@@ -75,7 +75,7 @@ function Schedule({
   match,
   history
 }) {
-  const { id, name, suggestions } = schedule
+  const { id, name, suggestions = [] } = schedule
 
   const suggestionIds = new Set(suggestions.map(s => s.filterId))
   const absentFilterIds = Object.keys(filtersById)

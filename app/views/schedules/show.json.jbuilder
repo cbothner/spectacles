@@ -1,1 +1,3 @@
-json.partial! "schedules/schedule", schedule: @schedule
+json.schedule do
+  json.partial! @schedule
+end

@@ -5,26 +5,32 @@ import { Route } from 'react-router-dom'
 import { Button, Intent, Tag } from '@blueprintjs/core'
 
 import Schedule from './schedule.js'
-import { addSchedule } from '../actions.js'
+import { createSchedule } from '../actions.js'
 
-const mapStateToProps = (state) => {
+function mapStateToProps(state) {
   return {
     schedules: Object.keys(state.schedulesById)
       .map( x => state.schedulesById[x]),
   }
 }
 
-const mapDispatchToProps = (dispatch, {history}) => {
+function mapDispatchToProps(dispatch, {history}) {
   return {
-    onAddSchedule: () => dispatch(addSchedule(history))
+    handleAddSchedule: () => dispatch(createSchedule())
+      .then(id => history.replace(`/schedules/${id}`))
   }
 }
 
-const SchedulesList = ({schedules, match, onAddSchedule}) => {
+const SchedulesList = ({schedules, match, handleAddSchedule}) => {
   return <article style={{marginTop: "2em"}}>
     <div style={{display: 'flex', justifyContent: 'space-between'}}>
       <h4>Specification Schedules</h4>
-      <Button intent={Intent.SUCCESS} iconName="add" text="New Filter" onClick={onAddSchedule} />
+      <Button
+        intent={Intent.SUCCESS}
+        iconName="add"
+        text="New Schedule"
+        onClick={handleAddSchedule}
+      />
     </div>
     <table className="pt-table pt-interactive" style={{width: '100%'}}>
       <thead>

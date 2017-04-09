@@ -12,6 +12,8 @@ export const DELETE_SCHEDULE = "DELETE_SCHEDULE"
 
 export const CHANGE_SELECTED_FILTER = "CHANGE_SELECTED_FILTER"
 
+// FILTERS
+
 export function getFilters() {
   return dispatch => api.get('/api/filters.json')
     .then(json => {
@@ -41,10 +43,6 @@ export function addFilter(id) {
   return {type: ADD_FILTER, id}
 }
 
-export function updateFilter(id, data) {
-  return {type: UPDATE_FILTER, id, data}
-}
-
 export function saveFilter(id, data) {
   return dispatch => {
     const {name, ce, basePrice, color, vlt, spectrophotometerData, lRatings,
@@ -62,6 +60,10 @@ export function saveFilter(id, data) {
   }
 }
 
+export function updateFilter(id, data) {
+  return {type: UPDATE_FILTER, id, data}
+}
+
 export function deleteFilter(id, history) {
   return dispatch => {
     if (!window.confirm("Are you sure you want to delete this filter?")) return {type: null}
@@ -71,6 +73,8 @@ export function deleteFilter(id, history) {
     })
   }
 }
+
+// SCHEDULES
 
 export function getSchedules() {
   return dispatch => api.get('/api/schedules.json')
@@ -86,21 +90,47 @@ export function setSchedules(schedules) {
   return {type: SET_SCHEDULES, schedules}
 }
 
-export function addSchedule(history) {
-  let id = Date.now()
-  history.replace(`/schedules/${id}`)
+export function createSchedule() {
+  return dispatch => api.post('/api/schedules.json', {
+    schedule: { name: '' }
+  })
+    .then( json => {
+      dispatch(addSchedule(json.schedule.id))
+      return json.schedule.id
+    } )
+
+}
+
+export function addSchedule(id) {
   return {type: ADD_SCHEDULE, id}
+}
+
+export function saveSchedule(id, data) {
+  return dispatch => {
+    const {name, suggestions} = data
+    api.patch(`/api/schedules/${id}.json`, {
+      name,
+      suggestions,
+    })
+  }
 }
 
 export function updateSchedule(id, data) {
   return {type: UPDATE_SCHEDULE, id, data}
 }
 
+
 export function deleteSchedule(id, history) {
-  if (!window.confirm("Are you sure you want to delete this schedule?")) return {type: null}
-  history.replace('/schedules')
-  return {type: DELETE_SCHEDULE, id}
+  return dispatch => {
+    if (!window.confirm("Are you sure you want to delete this schedule?")) return {type: null}
+    api.delete(`/api/schedules/${id}`).then(() => {
+      history.replace('/schedules')
+      return dispatch({type: DELETE_SCHEDULE, id})
+    })
+  }
 }
+
+// UI
 
 export function changeSelectedFilter(id) {
   return {type: CHANGE_SELECTED_FILTER, id}

@@ -12,7 +12,9 @@ import {
 } from '@blueprintjs/core'
 
 import {
+  getSchedules,
   updateSchedule,
+  saveSchedule,
   deleteSchedule,
   changeSelectedFilter
 } from '../actions.js'
@@ -34,23 +36,29 @@ function mapStateToProps(state, {match}) {
 
 function mapDispatchToProps(dispatch, {match, history}) {
   let id = match.params.scheduleId
+  const close = () => history.replace('/schedules')
   return {
-    onClose: () => {
-      history.replace('/schedules')
-      dispatch(changeSelectedFilter(""))
+    handleCancel: () => {
+      dispatch(getSchedules())
+      close()
     },
 
-    onChange: attr => e => {
+    handleChange: attr => e => {
       dispatch(updateSchedule(id, {[attr]: e.currentTarget.value}))
     },
 
-    onChangeSelectedFilter: e => {
+    handleChangeSelectedFilter: e => {
       dispatch(changeSelectedFilter(e.currentTarget.value))
     },
 
     setSuggestions: data => dispatch(updateSchedule(id, {suggestions: data})),
 
-    onDelete: () => dispatch(deleteSchedule(id, history))
+    handleSave: data => {
+      dispatch(saveSchedule(id, data))
+      close()
+    },
+
+    handleDelete: () => dispatch(deleteSchedule(id, history))
   }
 }
 
@@ -58,11 +66,12 @@ function Schedule({
   schedule,
   filtersById,
   selectedFilter,
-  onClose,
-  onChange,
+  handleCancel,
+  handleChange,
+  handleSave,
   setSuggestions,
-  onChangeSelectedFilter,
-  onDelete,
+  handleChangeSelectedFilter,
+  handleDelete,
   match,
   history
 }) {
@@ -74,7 +83,7 @@ function Schedule({
   const absentFilters = absentFilterIds.map( id => filtersById[id])
 
   return (
-    <Dialog isOpen={!!id} onClose={onClose} title="Schedule Details">
+    <Dialog isOpen={!!id} onClose={handleCancel} title="Schedule Details">
 
       <div className="pt-dialog-body">
 
@@ -82,7 +91,7 @@ function Schedule({
           leftIconName="document"
           placeholder="Schedule Name"
           value={name}
-          onChange={onChange('name')}
+          onChange={handleChange('name')}
         />
 
         <div className="pt-card" style={{marginTop: '1em'}}>
@@ -143,7 +152,7 @@ function Schedule({
           { absentFilters.length > 0 ? (
             <div className="pt-control-group" style={{marginTop: '1em'}}>
               <div className="pt-select">
-                <select value={selectedFilter} onChange={onChangeSelectedFilter}>
+                <select value={selectedFilter} onChange={handleChangeSelectedFilter}>
                   <option value={ NaN } disabled hidden>Choose a filter</option>
                   {absentFilters.map(filter => (
                     <option value={filter.id}>{filter.name}</option>
@@ -182,14 +191,14 @@ function Schedule({
             />
             <Button
               text="Delete"
-              onClick={onDelete}
+              onClick={handleDelete}
               intent={Intent.DANGER}
               iconName='trash'
             />
           </div>
           <div className="pt-dialog-footer-actions">
-            <Button text="Cancel" onClick={onClose} />
-            <Button text="Save" onClick={onClose} intent={Intent.PRIMARY} />
+            <Button text="Cancel" onClick={handleCancel} />
+            <Button text="Save" onClick={() => handleSave(schedule)} intent={Intent.PRIMARY} />
           </div>
         </div>
 

@@ -9,9 +9,9 @@ function SpectrophotometerChart({data, forPrint, center, width=500, height=200})
       height={height}
       margin={{
         top: center ? 15 : 5,
-        right: -30,
+        right: -25,
         bottom: -5,
-        left: center ? -30 : -10
+        left: center ? -25 : -10
       }}
     >
 
@@ -22,8 +22,8 @@ function SpectrophotometerChart({data, forPrint, center, width=500, height=200})
         tickCount={16}
       />
       <YAxis />
-      <YAxis yAxisId={1} orientation="right" />
-      <Legend />
+      <YAxis yAxisId={1} orientation="right" tickFormatter={x => `${x}%`}/>
+      <Legend wrapperStyle={forPrint ? { bottom: 5 } : {}} />
       <Tooltip />
 
       <Line

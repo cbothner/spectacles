@@ -5,7 +5,7 @@ import SpectrophotometerChart from './spectrophotometer_chart.js'
 
 import { Colors } from '@blueprintjs/core'
 
-const MultiFilterPrintout = ({suggestions, filtersById}) => { 
+const MultiFilterPrintout = ({suggestions, filtersById}) => {
   return <div style={{margin: '1.5em 2em'}}>
     {suggestions.map( suggestion => {
       const filter = filtersById[suggestion.filterId]
@@ -34,7 +34,7 @@ const MultiFilterPrintout = ({suggestions, filtersById}) => {
         <div style={{display: "flex", alignItems: 'flex-start'}}>
           <RangeTablePrintout title="CE Rating" name="L-Ratings" items={filter.lRatings} first Header="h5"/>
           <RangeTablePrintout title="Optical Density" name="ODs" items={filter.ods} Header="h5" />
-          <div style={{flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: '1em', marginTop: '-1em'}}>
+          <div style={{flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: '1em', marginTop: '-1em', marginBottom: '-1em'}}>
             <SpectrophotometerChart data={filter.spectrophotometerData} forPrint center width={290} height={140} />
           </div>
         </div>

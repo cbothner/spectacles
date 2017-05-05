@@ -62,8 +62,8 @@ PSQL
     su vagrant -c 'echo "*:*:*:vagrant:vagrant" > ~/.pgpass && chmod 0600 ~/.pgpass'
 
     su vagrant -c "bundle install"
-    su vagrant -c "bundle exec rake db:create"
-    su vagrant -c "bundle exec rake db:create RAILS_ENV=test"
+    su vagrant -c "bundle exec rake db:setup"
+    su vagrant -c "bundle exec rake db:setup RAILS_ENV=test"
 
     su vagrant -c "yarn"
 

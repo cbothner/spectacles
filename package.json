@@ -4,22 +4,20 @@
   "private": true,
   "description": "Manage and generate specification sheets for laser glasses",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
+    "@blueprintjs/core": "^1.4.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
-    "react-scripts": "0.8.4"
-  },
-  "dependencies": {
-    "@blueprintjs/core": "^1.4.0",
     "react": "^15.4.1",
     "react-addons-css-transition-group": "^15.4.1",
     "react-addons-transition-group": "^15.4.2",
     "react-dom": "^15.4.1",
     "react-redux": "^5.0.1",
     "react-router-dom": "^4.0.0",
+    "react-scripts": "0.8.4",
     "recharts": "^0.20.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
@@ -29,7 +27,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "mv build/* public/",
+    "heroku-postbuild": "npm run build && npm run deploy"
   },
   "proxy": "http://localhost:3001"
 }

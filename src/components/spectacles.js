@@ -1,38 +1,67 @@
-import React from 'react'
-import { Switch, Route, NavLink, Redirect } from 'react-router-dom'
+import React from 'react';
+import {connect} from 'react-redux';
+import {Switch, Route, NavLink, Redirect} from 'react-router-dom';
 
-import VisibleSchedulesList from './schedules_list.js'
-import VisibleFiltersList from './filters_list.js'
+import VisibleSchedulesList from './schedules_list.js';
+import VisibleFiltersList from './filters_list.js';
 
-const Spectacles = () => {
-  return <main style={{margin: "0 auto", maxWidth: "1200px"}}>
+import {getFilters, getSchedules} from '../actions.js';
 
-    <nav className="pt-navbar pt-dark">
-      <div className="pt-navbar-group pt-align-left">
-        <div className="pt-navbar-heading">Spectacles</div>
-        <span className="pt-navbar-divider"></span>
+class Spectacles extends React.Component {
+  constructor(props) {
+    super(props);
+    props.getFilters();
+    props.getSchedules();
+  }
 
-        <NavLink to="/schedules" className="pt-button pt-minimal pt-icon-document" activeClassName="pt-active">Schedules</NavLink>
-        <NavLink to="/filters" className="pt-button pt-minimal pt-icon-flash" activeClassName="pt-active">Filters</NavLink>
+  render() {
+    return (
+      <main style={{margin: '0 auto', maxWidth: '1200px'}}>
 
-      </div>
-      <div className="pt-navbar-group pt-align-right">
-        <input className="pt-input" placeholder={`Search Spectacles...`} type="text" />
-      </div>
-    </nav>
+        <nav className="pt-navbar pt-dark">
+          <div className="pt-navbar-group pt-align-left">
+            <div className="pt-navbar-heading">Spectacles</div>
+            <span className="pt-navbar-divider" />
 
-    <Switch>
-      <Route path="/filters" component={VisibleFiltersList} />
-      <Route path="/schedules" component={VisibleSchedulesList} />
-      <Redirect to="/filters" />
-    </Switch>
+            <NavLink
+              to="/schedules"
+              className="pt-button pt-minimal pt-icon-document"
+              activeClassName="pt-active"
+            >
+              Schedules
+            </NavLink>
+            <NavLink
+              to="/filters"
+              className="pt-button pt-minimal pt-icon-flash"
+              activeClassName="pt-active"
+            >
+              Filters
+            </NavLink>
 
-  </main>
+          </div>
+          <div className="pt-navbar-group pt-align-right">
+            <input
+              className="pt-input"
+              placeholder={`Search Spectacles...`}
+              type="text"
+            />
+          </div>
+        </nav>
+
+        <Switch>
+          <Route path="/filters" component={VisibleFiltersList} />
+          <Route path="/schedules" component={VisibleSchedulesList} />
+          <Redirect to="/filters" />
+        </Switch>
+
+      </main>
+    );
+  }
 }
 
 Spectacles.propTypes = {
   filters: React.PropTypes.array,
-  schedules: React.PropTypes.array
-}
+  schedules: React.PropTypes.array,
+};
 
-export default Spectacles
+export default connect(null, {getFilters, getSchedules})(Spectacles);

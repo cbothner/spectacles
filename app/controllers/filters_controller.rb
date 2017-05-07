@@ -12,6 +12,16 @@ class FiltersController < ApplicationController
   def show
   end
 
+  # GET /filters/find.json?name=ABC
+  def find
+    @filter = Filter.find_by_name(params[:name])
+    if @filter
+      render :show
+    else
+      head status: 404
+    end
+  end
+
   # POST /filters
   # POST /filters.json
   def create

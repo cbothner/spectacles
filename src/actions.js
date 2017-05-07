@@ -22,6 +22,15 @@ export function getFilters() {
     });
 }
 
+export function getFilter(name) {
+  return dispatch =>
+    api.get(`/api/filters/find.json?name=${name}`).then(json => {
+      if (json.filter) {
+        dispatch(updateFilter(json.filter.id, json.filter));
+      }
+    });
+}
+
 function setFilters(filters) {
   return {type: SET_FILTERS, filters};
 }

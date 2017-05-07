@@ -1,19 +1,19 @@
-import React from 'react'
-import { LineChart, XAxis, YAxis, Legend, Line, Tooltip } from 'recharts'
+import React from 'react';
+import {LineChart, XAxis, YAxis, Legend, Line, Tooltip} from 'recharts';
 
-function SpectrophotometerChart({data, forPrint, center, width=500, height=200}) {
-  return (
-    <LineChart
-      data={data}
-      width={width}
-      height={height}
-      margin={{
+function SpectrophotometerChart(
+  {data, forPrint, embedded, center, width = 500, height = 200},
+) {
+  const margins = embedded
+    ? {top: 0, right: 0, bottom: 10, left: 0}
+    : {
         top: center ? 15 : 5,
-        right: -25,
+        right: -20,
         bottom: -5,
-        left: center ? -25 : -10
-      }}
-    >
+        left: center ? -25 : -10,
+      };
+  return (
+    <LineChart data={data} width={width} height={height} margin={margins}>
 
       <XAxis
         dataKey="wavelength"
@@ -22,8 +22,8 @@ function SpectrophotometerChart({data, forPrint, center, width=500, height=200})
         tickCount={16}
       />
       <YAxis />
-      <YAxis yAxisId={1} orientation="right" tickFormatter={x => `${x}%`}/>
-      <Legend wrapperStyle={forPrint ? { bottom: 5 } : {}} />
+      <YAxis yAxisId={1} orientation="right" tickFormatter={x => `${x}%`} />
+      <Legend wrapperStyle={forPrint ? {bottom: 5} : {}} />
       <Tooltip />
 
       <Line
@@ -51,4 +51,4 @@ function SpectrophotometerChart({data, forPrint, center, width=500, height=200})
   );
 }
 
-export default SpectrophotometerChart
+export default SpectrophotometerChart;

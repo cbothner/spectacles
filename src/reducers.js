@@ -55,25 +55,9 @@ function schedulesById(state = {}, action) {
   }
 }
 
-function ui(state, action) {
-  if (typeof state === 'undefined') return { selectedFilter: NaN }
-
-  switch (action.type) {
-    case A.CHANGE_SELECTED_FILTER:
-      return {
-        ...state,
-        selectedFilter: parseInt(action.id, 10)
-      }
-
-    default:
-      return state
-  }
-}
-
 const reducer = combineReducers({
   filtersById,
-  schedulesById,
-  ui
+  schedulesById
 })
 
 export default reducer

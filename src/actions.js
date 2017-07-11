@@ -10,8 +10,6 @@ export const ADD_SCHEDULE = 'ADD_SCHEDULE'
 export const UPDATE_SCHEDULE = 'UPDATE_SCHEDULE'
 export const DELETE_SCHEDULE = 'DELETE_SCHEDULE'
 
-export const CHANGE_SELECTED_FILTER = 'CHANGE_SELECTED_FILTER'
-
 // FILTERS
 
 export function getFilters() {
@@ -150,10 +148,4 @@ export function deleteSchedule(id, history) {
       return dispatch({ type: DELETE_SCHEDULE, id })
     })
   }
-}
-
-// UI
-
-export function changeSelectedFilter(id) {
-  return { type: CHANGE_SELECTED_FILTER, id }
 }

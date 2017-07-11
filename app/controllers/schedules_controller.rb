@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class SchedulesController < ApplicationController
-  before_action :set_schedule, only: [:show, :update, :destroy]
+  before_action :set_schedule, only: %i[show update destroy]
 
   # GET /schedules
   # GET /schedules.json
@@ -9,8 +11,7 @@ class SchedulesController < ApplicationController
 
   # GET /schedules/1
   # GET /schedules/1.json
-  def show
-  end
+  def show; end
 
   # POST /schedules
   # POST /schedules.json
@@ -41,13 +42,14 @@ class SchedulesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_schedule
-      @schedule = Schedule.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def schedule_params
-      params.require(:schedule).permit(:name, suggestions: [:filter_id, :special_price])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_schedule
+    @schedule = Schedule.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def schedule_params
+    params.require(:schedule).permit(:name, suggestions: %i[filter_id special_price])
+  end
 end

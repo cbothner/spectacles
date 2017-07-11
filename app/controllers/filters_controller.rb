@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class FiltersController < ApplicationController
-  before_action :set_filter, only: [:show, :update, :destroy]
+  before_action :set_filter, only: %i[show update destroy]
 
   # GET /filters
   # GET /filters.json
@@ -9,8 +11,7 @@ class FiltersController < ApplicationController
 
   # GET /filters/1
   # GET /filters/1.json
-  def show
-  end
+  def show; end
 
   # GET /filters/find.json?name=ABC
   def find
@@ -51,18 +52,19 @@ class FiltersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_filter
-      @filter = Filter.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def filter_params
-      params.require(:filter).permit(
-        :name, :ce, :base_price, :color, :vlt,
-        spectrophotometer_data: [:wavelength, :od, :transmittance],
-        l_ratings: [:range, :value],
-        ods: [:range, :value],
-      )
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_filter
+    @filter = Filter.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def filter_params
+    params.require(:filter).permit(
+      :name, :ce, :base_price, :color, :vlt,
+      spectrophotometer_data: %i[wavelength od transmittance],
+      l_ratings: %i[range value],
+      ods: %i[range value]
+    )
+  end
 end

@@ -11,7 +11,7 @@ function mapStateToProps(state) {
   return {
     filters: Object.keys(state.filtersById)
       .map(x => state.filtersById[x])
-      .sort((a, b) => a.name > b.name),
+      .sort((a, b) => a.name.localeCompare(b.name)),
   };
 }
 

@@ -1,13 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700');
+
 body {
   font-size: 12px;
   font-family: "Source Sans Pro";
 }
-h1 { font-size: 38px; }
-h2 { font-size: 25px; }
-h3 { font-size: 22px; }
-h4 { font-size: 18px; }
-h5 { font-size: 15px; }
-h6 { font-size: 13px; }
+h1 {
+  font-size: 38px;
+}
+h2 {
+  font-size: 25px;
+}
+h3 {
+  font-size: 22px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 15px;
+}
+h6 {
+  font-size: 13px;
+}
 
 table.pt-table {
   border-spacing: 0;
@@ -24,7 +38,8 @@ table.pt-table tbody tr:first-child td {
   border: 1px solid rgb(210, 214, 217);
 }
 
-table.pt-table.pt-condensed th, table.pt-table.pt-condensed td {
+table.pt-table.pt-condensed th,
+table.pt-table.pt-condensed td {
   padding-top: 2px;
   padding-bottom: 2px;
   line-height: 1.1;

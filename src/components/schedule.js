@@ -123,11 +123,9 @@ function Schedule({
                     step="0.01"
                     className="flex-grow"
                     onChange={e =>
-                      setSuggestions(
-                        update(suggestions, index, {
-                          specialPrice: e.currentTarget.value
-                        })
-                      )}
+                      onChangeItem({
+                        specialPrice: e.currentTarget.value
+                      })}
                     rightElement={
                       item.specialPrice &&
                       <Tag className="pt-minimal">

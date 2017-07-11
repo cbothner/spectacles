@@ -1,23 +1,23 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react'
 
-import {createStore, applyMiddleware} from 'redux';
-import {Provider} from 'react-redux';
-import thunk from 'redux-thunk';
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
 
-import {HashRouter as Router, Switch, Route} from 'react-router-dom';
+import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 
-import '@blueprintjs/core/dist/blueprint.css';
-import './App.css';
+import '@blueprintjs/core/dist/blueprint.css'
+import './App.css'
 
-import {FocusStyleManager} from '@blueprintjs/core';
-FocusStyleManager.onlyShowFocusOnTabs();
+import { FocusStyleManager } from '@blueprintjs/core'
+FocusStyleManager.onlyShowFocusOnTabs()
 
-import reducer from './reducers.js';
+import reducer from './reducers.js'
 
-import Spectacles from './components/spectacles.js';
-import Embed from './components/embed.js';
+import Spectacles from './components/spectacles.js'
+import Embed from './components/embed.js'
 
-const store = createStore(reducer, applyMiddleware(thunk));
+const store = createStore(reducer, applyMiddleware(thunk))
 
 class App extends Component {
   render() {
@@ -30,8 +30,8 @@ class App extends Component {
           </Switch>
         </Router>
       </Provider>
-    );
+    )
   }
 }
 
-export default App;
+export default App

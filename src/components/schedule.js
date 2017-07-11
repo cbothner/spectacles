@@ -1,6 +1,6 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Route } from 'react-router-dom';
+import React from 'react'
+import { connect } from 'react-redux'
+import { Route } from 'react-router-dom'
 
 import {
   Dialog,
@@ -9,7 +9,7 @@ import {
   InputGroup,
   Tag,
   Intent
-} from '@blueprintjs/core';
+} from '@blueprintjs/core'
 
 import {
   getSchedules,
@@ -17,50 +17,50 @@ import {
   saveSchedule,
   deleteSchedule,
   changeSelectedFilter
-} from '../actions.js';
+} from '../actions.js'
 
-import { update, push, remove } from '../immutable_array.js';
+import { update, push, remove } from '../immutable_array.js'
 
-import Printout from './printout.js';
-import SchedulePrintout from './schedule_printout.js';
-import PrintPortal from './print_portal.js';
-import SortableList from './sortable_list.js';
+import Printout from './printout.js'
+import SchedulePrintout from './schedule_printout.js'
+import PrintPortal from './print_portal.js'
+import SortableList from './sortable_list.js'
 
 function mapStateToProps(state, { match }) {
-  let schedule = state.schedulesById[match.params.scheduleId];
+  let schedule = state.schedulesById[match.params.scheduleId]
   return {
     schedule,
     filtersById: state.filtersById,
     selectedFilter: state.ui.selectedFilter
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch, { match, history }) {
-  let id = match.params.scheduleId;
-  const close = () => history.replace('/schedules');
+  let id = match.params.scheduleId
+  const close = () => history.replace('/schedules')
   return {
     handleCancel: () => {
-      dispatch(getSchedules());
-      close();
+      dispatch(getSchedules())
+      close()
     },
 
     handleChange: attr => e => {
-      dispatch(updateSchedule(id, { [attr]: e.currentTarget.value }));
+      dispatch(updateSchedule(id, { [attr]: e.currentTarget.value }))
     },
 
     handleChangeSelectedFilter: e => {
-      dispatch(changeSelectedFilter(e.currentTarget.value));
+      dispatch(changeSelectedFilter(e.currentTarget.value))
     },
 
     setSuggestions: data => dispatch(updateSchedule(id, { suggestions: data })),
 
     handleSave: data => {
-      dispatch(saveSchedule(id, data));
-      close();
+      dispatch(saveSchedule(id, data))
+      close()
     },
 
     handleDelete: () => dispatch(deleteSchedule(id, history))
-  };
+  }
 }
 
 function Schedule({
@@ -76,19 +76,17 @@ function Schedule({
   match,
   history
 }) {
-  const { id, name, suggestions = [] } = schedule;
+  const { id, name, suggestions = [] } = schedule
 
-  const suggestionIds = new Set(suggestions.map(s => s.filterId));
+  const suggestionIds = new Set(suggestions.map(s => s.filterId))
   const absentFilterIds = Object.keys(filtersById).filter(
     f => !suggestionIds.has(parseInt(f, 10))
-  );
-  const absentFilters = absentFilterIds.map(id => filtersById[id]);
+  )
+  const absentFilters = absentFilterIds.map(id => filtersById[id])
 
   return (
     <Dialog isOpen={!!id} onClose={handleCancel} title="Schedule Details">
-
       <div className="pt-dialog-body">
-
         <InputGroup
           leftIconName="document"
           placeholder="Schedule Name"
@@ -101,7 +99,7 @@ function Schedule({
 
           <SortableList items={suggestions} onChange={setSuggestions}>
             {({ item, index, onChangeItem }) => {
-              let filter = filtersById[item.filterId] || {};
+              let filter = filtersById[item.filterId] || {}
               return (
                 <span style={{ display: 'flex', flex: 1 }}>
                   <Tag
@@ -112,7 +110,9 @@ function Schedule({
                       border: '1px solid rgba(16, 22, 26, 0.1)'
                     }}
                   >
-                    <strong>{filter.name || '???'}</strong>
+                    <strong>
+                      {filter.name || '???'}
+                    </strong>
                   </Tag>
 
                   <InputGroup
@@ -130,13 +130,13 @@ function Schedule({
                       )}
                     rightElement={
                       item.specialPrice &&
-                        <Tag className="pt-minimal">
-                          ${filter.basePrice} list
-                        </Tag>
+                      <Tag className="pt-minimal">
+                        ${filter.basePrice} list
+                      </Tag>
                     }
                   />
                 </span>
-              );
+              )
             }}
           </SortableList>
 
@@ -147,10 +147,14 @@ function Schedule({
                     value={selectedFilter}
                     onChange={handleChangeSelectedFilter}
                   >
-                    <option value={NaN} disabled hidden>Choose a filter</option>
-                    {absentFilters.map(filter => (
-                      <option value={filter.id}>{filter.name}</option>
-                    ))}
+                    <option value={NaN} disabled hidden>
+                      Choose a filter
+                    </option>
+                    {absentFilters.map(filter =>
+                      <option value={filter.id}>
+                        {filter.name}
+                      </option>
+                    )}
                   </select>
                 </div>
 
@@ -200,16 +204,15 @@ function Schedule({
 
       <Route
         path={`${match.url}/print`}
-        render={() => (
+        render={() =>
           <PrintPortal>
             <Printout>
               <SchedulePrintout schedule={schedule} filtersById={filtersById} />
             </Printout>
-          </PrintPortal>
-        )}
+          </PrintPortal>}
       />
     </Dialog>
-  );
+  )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Schedule);
+export default connect(mapStateToProps, mapDispatchToProps)(Schedule)

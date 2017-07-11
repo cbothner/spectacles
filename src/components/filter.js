@@ -2,7 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 
-import { Dialog, AnchorButton, Button, InputGroup, Tag, Intent } from '@blueprintjs/core'
+import {
+  Dialog,
+  AnchorButton,
+  Button,
+  InputGroup,
+  Tag,
+  Intent
+} from '@blueprintjs/core'
 
 import SpectrophotometerData from './spectrophotometer_data.js'
 import RangeTable from './range_table.js'
@@ -17,43 +24,41 @@ import {
   deleteFilter
 } from '../actions.js'
 
-function mapStateToProps(state, {match}) {
+function mapStateToProps(state, { match }) {
   return {
-    filter: state.filtersById[match.params.filterId],
-  };
+    filter: state.filtersById[match.params.filterId]
+  }
 }
 
-function mapDispatchToProps(dispatch, {history, match}) {
-  let id = match.params.filterId;
-  const close = () => history.replace('/filters');
+function mapDispatchToProps(dispatch, { history, match }) {
+  let id = match.params.filterId
+  const close = () => history.replace('/filters')
   return {
-    handleChange: attr => e => dispatch(updateFilter(
-      id,
-      {[attr]: e.currentTarget.value}
-    )),
-    handleToggleCE: val => dispatch(updateFilter(id, {ce: val})),
+    handleChange: attr => e =>
+      dispatch(updateFilter(id, { [attr]: e.currentTarget.value })),
+    handleToggleCE: val => dispatch(updateFilter(id, { ce: val })),
     handleDelete: () => dispatch(deleteFilter(id, history)),
     handleSave: data => {
-      dispatch(saveFilter(id, data));
-      close();
+      dispatch(saveFilter(id, data))
+      close()
     },
     handleCancel: () => {
-      dispatch(getFilters());
-      close();
-    },
-  };
+      dispatch(getFilters())
+      close()
+    }
+  }
 }
 
 function Filter({
-    filter = {},
-    match,
-    history,
-    handleChange,
-    handleToggleCE,
-    handleDelete,
-    handleSave,
-    handleCancel,
-  }) {
+  filter = {},
+  match,
+  history,
+  handleChange,
+  handleToggleCE,
+  handleDelete,
+  handleSave,
+  handleCancel
+}) {
   const { id, name, ce, basePrice, color, vlt } = filter
 
   return (
@@ -61,27 +66,26 @@ function Filter({
       isOpen={!!id}
       onClose={handleCancel}
       title="Filter Details"
-      style={{width: 763, top: '15%'}}
+      style={{ width: 763, top: '15%' }}
     >
       <div className="pt-dialog-body">
-
         <div className="pt-control-group">
           <InputGroup
-            leftIconName='flash'
+            leftIconName="flash"
             placeholder="Name"
             value={name}
             onChange={handleChange('name')}
             rightElement={
               <Button
                 iconName={ce ? 'tick' : 'time'}
-                text={ce ? "EN207 Certified" : "EN207 Pending"}
+                text={ce ? 'EN207 Certified' : 'EN207 Pending'}
                 className="pt-minimal"
                 onClick={() => handleToggleCE(!ce)}
               />
             }
           />
           <InputGroup
-            leftIconName='dollar'
+            leftIconName="dollar"
             placeholder="Base Price"
             value={basePrice}
             onChange={handleChange('basePrice')}
@@ -89,73 +93,72 @@ function Filter({
             step="0.01"
           />
           <InputGroup
-            leftIconName='tint'
+            leftIconName="tint"
             placeholder="Color"
             value={color}
             onChange={handleChange('color')}
           />
           <InputGroup
-            leftIconName='resolve'
+            leftIconName="resolve"
             placeholder="VLT"
             value={vlt}
             onChange={handleChange('vlt')}
             type="number"
-            rightElement={
-              <Tag className="pt-minimal">%</Tag>
-            } />
-          </div>
-
-          <SpectrophotometerData id={id} />
-
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: '1em'
-            }}
-          >
-            <RangeTable filterId={id} name="OD Ratings" itemsKey="ods" />
-            <RangeTable filterId={id} name="L-Ratings" itemsKey="lRatings" />
-          </div>
-
+            rightElement={<Tag className="pt-minimal">%</Tag>}
+          />
         </div>
+
+        <SpectrophotometerData id={id} />
+
         <div
-          className="pt-dialog-footer"
-          style={{display: 'flex', justifyContent: 'space-between'}}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: '1em'
+          }}
         >
-          <div className="pt-dialog-footer-actions">
-            <AnchorButton
-              text="Print"
-              onClick={() => history.replace(`${match.url}/print`)}
-              iconName='print'
-            />
-            <Button
-              text="Delete"
-              onClick={handleDelete}
-              intent={Intent.DANGER}
-              iconName='trash'
-            />
-          </div>
-          <div className="pt-dialog-footer-actions">
-            <Button text="Cancel" onClick={handleCancel} />
-            <Button
-              text="Save"
-              onClick={() => handleSave(filter)}
-              intent={Intent.PRIMARY}
-            />
-          </div>
+          <RangeTable filterId={id} name="OD Ratings" itemsKey="ods" />
+          <RangeTable filterId={id} name="L-Ratings" itemsKey="lRatings" />
         </div>
+      </div>
+      <div
+        className="pt-dialog-footer"
+        style={{ display: 'flex', justifyContent: 'space-between' }}
+      >
+        <div className="pt-dialog-footer-actions">
+          <AnchorButton
+            text="Print"
+            onClick={() => history.replace(`${match.url}/print`)}
+            iconName="print"
+          />
+          <Button
+            text="Delete"
+            onClick={handleDelete}
+            intent={Intent.DANGER}
+            iconName="trash"
+          />
+        </div>
+        <div className="pt-dialog-footer-actions">
+          <Button text="Cancel" onClick={handleCancel} />
+          <Button
+            text="Save"
+            onClick={() => handleSave(filter)}
+            intent={Intent.PRIMARY}
+          />
+        </div>
+      </div>
 
-        <Route path={`${match.url}/print`} render={() => (
+      <Route
+        path={`${match.url}/print`}
+        render={() =>
           <PrintPortal>
             <Printout>
               <SingleFilterPrintout filter={filter} />
             </Printout>
-          </PrintPortal>
-        )}
+          </PrintPortal>}
       />
     </Dialog>
-  );
+  )
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filter)

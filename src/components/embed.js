@@ -1,51 +1,51 @@
-import React from 'react';
-import {connect} from 'react-redux';
+import React from 'react'
+import { connect } from 'react-redux'
 
-import SpectrophotometerChart from './spectrophotometer_chart';
+import SpectrophotometerChart from './spectrophotometer_chart'
 
-import {getFilter} from '../actions.js';
+import { getFilter } from '../actions.js'
 
-import '../embed.css';
+import '../embed.css'
 
 var throttle = (type, name, obj) => {
-  obj = obj || window;
-  var running = false;
+  obj = obj || window
+  var running = false
   var func = function() {
     if (running) {
-      return;
+      return
     }
-    running = true;
+    running = true
     requestAnimationFrame(function() {
-      obj.dispatchEvent(new CustomEvent(name));
-      running = false;
-    });
-  };
-  obj.addEventListener(type, func);
-};
+      obj.dispatchEvent(new CustomEvent(name))
+      running = false
+    })
+  }
+  obj.addEventListener(type, func)
+}
 
-throttle('resize', 'optimizedResize');
+throttle('resize', 'optimizedResize')
 
-function mapStateToProps({filtersById}, {match}) {
+function mapStateToProps({ filtersById }, { match }) {
   return {
-    filter: filtersById[Object.keys(filtersById)[0]] || {},
-  };
+    filter: filtersById[Object.keys(filtersById)[0]] || {}
+  }
 }
 
 class Embed extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    props.getFilter(props.match.params.name);
+    props.getFilter(props.match.params.name)
 
-    window.addEventListener('optimizedResize', () => this.forceUpdate());
+    window.addEventListener('optimizedResize', () => this.forceUpdate())
 
-    document.body.classList.add('embedded');
+    document.body.classList.add('embedded')
   }
 
   render() {
-    const {filter} = this.props;
+    const { filter } = this.props
     return (
-      <div style={{overflow: 'hidden'}}>
+      <div style={{ overflow: 'hidden' }}>
         <SpectrophotometerChart
           embedded
           data={filter.spectrophotometerData}
@@ -53,8 +53,8 @@ class Embed extends React.Component {
           height={document.documentElement.clientHeight}
         />
       </div>
-    );
+    )
   }
 }
 
-export default connect(mapStateToProps, {getFilter})(Embed);
+export default connect(mapStateToProps, { getFilter })(Embed)

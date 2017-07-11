@@ -3,78 +3,77 @@ import * as A from './actions.js'
 
 function filtersById(state = {}, action) {
   switch (action.type) {
-
     case A.SET_FILTERS:
       return action.filters
 
     case A.ADD_FILTER:
       return {
         ...state,
-        [action.id]: {id: action.id},
+        [action.id]: { id: action.id }
       }
 
     case A.UPDATE_FILTER:
       return {
         ...state,
-        [action.id]: {...state[action.id], ...action.data},
+        [action.id]: { ...state[action.id], ...action.data }
       }
 
     case A.DELETE_FILTER:
-      let newState = {...state}
+      let newState = { ...state }
       delete newState[action.id]
       return newState
 
-    default: return state
-
+    default:
+      return state
   }
 }
 
 function schedulesById(state = {}, action) {
   switch (action.type) {
-
     case A.SET_SCHEDULES:
       return action.schedules
 
     case A.ADD_SCHEDULE:
       return {
         ...state,
-        [action.id]: {id: action.id, suggestions: []},
+        [action.id]: { id: action.id, suggestions: [] }
       }
 
     case A.UPDATE_SCHEDULE:
       return {
         ...state,
-        [action.id]: {...state[action.id], ...action.data},
+        [action.id]: { ...state[action.id], ...action.data }
       }
 
     case A.DELETE_SCHEDULE:
-      let newState = {...state}
+      let newState = { ...state }
       delete newState[action.id]
       return newState
 
-    default: return state
+    default:
+      return state
   }
 }
 
 function ui(state, action) {
-  if (typeof state === 'undefined')  return { selectedFilter: NaN };
+  if (typeof state === 'undefined') return { selectedFilter: NaN }
 
   switch (action.type) {
-
     case A.CHANGE_SELECTED_FILTER:
       return {
-      ...state,
-      selectedFilter: parseInt(action.id, 10),
-    }
+        ...state,
+        selectedFilter: parseInt(action.id, 10)
+      }
 
-    default: return state
+    default:
+      return state
   }
 }
 
 const reducer = combineReducers({
   filtersById,
   schedulesById,
-  ui,
+  ui
 })
 
 export default reducer

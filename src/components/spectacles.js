@@ -1,23 +1,22 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import {Switch, Route, NavLink, Redirect} from 'react-router-dom';
+import React from 'react'
+import { connect } from 'react-redux'
+import { Switch, Route, NavLink, Redirect } from 'react-router-dom'
 
-import VisibleSchedulesList from './schedules_list.js';
-import VisibleFiltersList from './filters_list.js';
+import VisibleSchedulesList from './schedules_list.js'
+import VisibleFiltersList from './filters_list.js'
 
-import {getFilters, getSchedules} from '../actions.js';
+import { getFilters, getSchedules } from '../actions.js'
 
 class Spectacles extends React.Component {
   constructor(props) {
-    super(props);
-    props.getFilters();
-    props.getSchedules();
+    super(props)
+    props.getFilters()
+    props.getSchedules()
   }
 
   render() {
     return (
-      <main style={{margin: '0 auto', maxWidth: '1200px'}}>
-
+      <main style={{ margin: '0 auto', maxWidth: '1200px' }}>
         <nav className="pt-navbar pt-dark">
           <div className="pt-navbar-group pt-align-left">
             <div className="pt-navbar-heading">Spectacles</div>
@@ -37,7 +36,6 @@ class Spectacles extends React.Component {
             >
               Filters
             </NavLink>
-
           </div>
           <div className="pt-navbar-group pt-align-right">
             <input
@@ -53,15 +51,14 @@ class Spectacles extends React.Component {
           <Route path="/schedules" component={VisibleSchedulesList} />
           <Redirect to="/filters" />
         </Switch>
-
       </main>
-    );
+    )
   }
 }
 
 Spectacles.propTypes = {
   filters: React.PropTypes.array,
-  schedules: React.PropTypes.array,
-};
+  schedules: React.PropTypes.array
+}
 
-export default connect(null, {getFilters, getSchedules})(Spectacles);
+export default connect(null, { getFilters, getSchedules })(Spectacles)

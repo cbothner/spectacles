@@ -20,11 +20,11 @@ const MultiFilterPrintout = ({ suggestions, filtersById }) => {
                   </strong>
                   <span
                     className="pt-text-muted"
-                    style={
-                      suggestion.specialPrice && {
-                        textDecoration: 'line-through'
-                      }
-                    }
+                    style={{
+                      textDecoration: suggestion.specialPrice
+                        ? 'line-through'
+                        : 'none'
+                    }}
                   >
                     ${filter.basePrice} per pair
                   </span>{' '}

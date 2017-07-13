@@ -32,10 +32,13 @@ const SchedulesList = ({ schedules, match, handleAddSchedule }) => {
           onClick={handleAddSchedule}
         />
       </div>
-      <table className="pt-table pt-interactive" style={{ width: '100%' }}>
+      <table
+        className="pt-table pt-interactive"
+        style={{ width: '100%', tableLayout: 'fixed', overflow: 'hidden' }}
+      >
         <thead>
           <tr>
-            <th style={{ maxWidth: '5em' }}>Schedule Name</th>
+            <th style={{ width: '15em' }}>Schedule Name</th>
             <th>Included Filters</th>
           </tr>
         </thead>
@@ -65,7 +68,7 @@ const SchedulesListEntry = ({ id, name = '—', suggestions = [] }) => {
           <td>
             {name}
           </td>
-          <td>
+          <td style={{ lineHeight: 1.8, paddingTop: 8 }}>
             {suggestions.map(suggestion => {
               return (
                 <FilterTag

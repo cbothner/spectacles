@@ -91,7 +91,12 @@ class Schedule extends React.Component {
     const absentFilters = absentFilterIds.map(id => filtersById[id])
 
     return (
-      <Dialog isOpen={!!id} onClose={handleCancel} title="Schedule Details">
+      <Dialog
+        isOpen={!!id}
+        onClose={handleCancel}
+        title="Schedule Details"
+        style={{ top: '10%' }}
+      >
         <div className="pt-dialog-body">
           <InputGroup
             leftIconName="document"

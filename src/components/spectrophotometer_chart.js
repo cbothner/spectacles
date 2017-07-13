@@ -28,7 +28,7 @@ function SpectrophotometerChart({
       <YAxis />
       <YAxis yAxisId={1} orientation="right" tickFormatter={x => `${x}%`} />
       <Legend wrapperStyle={forPrint ? { bottom: 5 } : {}} />
-      <Tooltip />
+      <Tooltip content={<CustomTooltip />} />
 
       <Line
         name="OD"
@@ -55,3 +55,21 @@ function SpectrophotometerChart({
 }
 
 export default SpectrophotometerChart
+
+const CustomTooltip = ({ label, payload }) => {
+  return (
+    <div className="pt-card pt-elevation-2">
+      <p style={{ margin: 0 }}>
+        <strong>
+          {label}nm
+        </strong>
+      </p>
+      {payload.map(datum =>
+        <p style={{ margin: 0 }}>
+          <strong style={{ color: datum.color }}>{datum.name}:</strong>{' '}
+          {datum.value.toPrecision(2)}
+        </p>
+      )}
+    </div>
+  )
+}

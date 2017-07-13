@@ -44,7 +44,7 @@ function RangeTable({ items = [], name, setItems }) {
 
       <SortableList items={items} onChange={setItems}>
         {({ item, onChangeItem }) =>
-          <span>
+          <span style={{ display: 'flex' }}>
             <input
               className="pt-input"
               placeholder="Range"

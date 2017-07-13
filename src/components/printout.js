@@ -32,8 +32,7 @@ const styles = {
   },
 
   colorBar: {
-    backgroundImage:
-      'url(http://noirlaser.com/skin/frontend/lookbook/noirlaser/images/laser-strip.png)',
+    backgroundImage: 'url(/laser-strip.png)',
     backgroundSize: 'contain',
     width: '100%',
     height: 5

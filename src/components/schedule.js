@@ -160,7 +160,7 @@ class Schedule extends React.Component {
                         Choose a filter
                       </option>
                       {absentFilters.map(filter =>
-                        <option value={filter.id}>
+                        <option key={filter.id} value={filter.id}>
                           {filter.name}
                         </option>
                       )}

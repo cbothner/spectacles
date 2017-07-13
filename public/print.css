@@ -3,7 +3,9 @@
 body {
   font-size: 12px;
   font-family: "Source Sans Pro";
+  background: #f5f8fa !important;
 }
+
 h1 {
   font-size: 38px;
 }
@@ -36,6 +38,7 @@ table.pt-table tbody tr:first-child td {
 .pt-card {
   box-shadow: none;
   border: 1px solid rgb(210, 214, 217);
+  page-break-inside: avoid;
 }
 
 table.pt-table.pt-condensed th,

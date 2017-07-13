@@ -18,31 +18,35 @@ class PrintPortal extends React.Component {
     idoc.body.style.margin = '0'
     idoc.body.style.backgroundColor = '#F5F8FA'
 
-    var link = idoc.createElement('link')
-    link.rel = 'stylesheet'
-    link.type = 'text/css'
-    link.href = 'https://unpkg.com/@blueprintjs/core@1.6.0/dist/blueprint.css'
-    idoc.head.appendChild(link)
+    var blueprintLink = idoc.createElement('link')
+    blueprintLink.rel = 'stylesheet'
+    blueprintLink.type = 'text/css'
+    blueprintLink.href = '/blueprint.css'
+    idoc.head.appendChild(blueprintLink)
 
-    link = idoc.createElement('link')
-    link.rel = 'stylesheet'
-    link.type = 'text/css'
-    link.media = 'print'
-    link.href = '/print.css'
-    idoc.head.appendChild(link)
+    var printStylesheetLink = idoc.createElement('link')
+    printStylesheetLink.rel = 'stylesheet'
+    printStylesheetLink.type = 'text/css'
+    printStylesheetLink.media = 'print'
+    printStylesheetLink.href = '/print.css'
+    idoc.head.appendChild(printStylesheetLink)
 
     var div = idoc.createElement('div')
     idoc.body.appendChild(div)
 
-    ReactDOM.render(this.props.children, div)
-    x.onload = setTimeout(() => {
-      x.contentWindow.print()
-      document.body.removeChild(x)
+    blueprintLink.onload = () => {
+      ReactDOM.render(this.props.children, div, () => {
+        setTimeout(() => {
+          x.contentWindow.print()
+          document.body.removeChild(x)
 
-      const { location, history } = this.props
-      const match = location.pathname.match(/\/print$/)
-      if (match) history.replace(location.pathname.substring(0, match.index))
-    }, 100)
+          const { location, history } = this.props
+          const match = location.pathname.match(/\/print$/)
+          if (match)
+            history.replace(location.pathname.substring(0, match.index))
+        }, 100)
+      })
+    }
   }
 
   render() {

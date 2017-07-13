@@ -11,7 +11,7 @@ const MultiFilterPrintout = ({ suggestions, filtersById }) => {
       {suggestions.map(suggestion => {
         const filter = filtersById[suggestion.filterId]
         return (
-          <div className="pt-card" style={{ marginBottom: '1em' }}>
+          <div key={filter.id} className="pt-card" style={{ margin: '1em 0' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <div>
                 <p>

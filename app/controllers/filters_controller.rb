@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class FiltersController < ApplicationController
+  before_action :authenticate_admin, except: %i[find]
   before_action :set_filter, only: %i[show update destroy]
 
   # GET /filters

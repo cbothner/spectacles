@@ -7,6 +7,10 @@ function token(state = localStorage.getItem('token'), action) {
       localStorage.setItem('token', action.token)
       return action.token
 
+    case A.DELETE_TOKEN:
+      localStorage.removeItem('token')
+      return null
+
     default:
       return state
   }

@@ -1,6 +1,7 @@
 import api from './api.js'
 
 export const SET_TOKEN = 'SET_TOKEN'
+export const DELETE_TOKEN = 'DELETE_TOKEN'
 
 export const SET_FILTERS = 'SET_FILTERS'
 export const ADD_FILTER = 'ADD_FILTER'
@@ -23,6 +24,10 @@ export function getToken({ email, password }) {
 
 export function setToken(token) {
   return { type: SET_TOKEN, token }
+}
+
+export function deleteToken() {
+  return { type: DELETE_TOKEN }
 }
 
 // FILTERS

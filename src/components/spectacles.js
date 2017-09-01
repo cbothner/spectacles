@@ -2,17 +2,19 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Switch, Route, NavLink, Redirect } from 'react-router-dom'
 
+import { Button } from '@blueprintjs/core'
+
 import LogInDialog from './log_in_dialog.js'
 import VisibleSchedulesList from './schedules_list.js'
 import VisibleFiltersList from './filters_list.js'
 
-import { getFilters, getSchedules } from '../actions.js'
+import { getFilters, getSchedules, deleteToken } from '../actions.js'
 
 function mapStateToProps({ token }) {
   return { token }
 }
 
-const mapDispatchToProps = { getFilters, getSchedules }
+const mapDispatchToProps = { getFilters, getSchedules, deleteToken }
 
 class Spectacles extends React.Component {
   constructor(props) {
@@ -52,6 +54,13 @@ class Spectacles extends React.Component {
               className="pt-input"
               placeholder={`Search Spectacles...`}
               type="text"
+            />
+            <span className="pt-navbar-divider" />
+            <Button
+              className="pt-minimal"
+              text="Log out"
+              iconName="log-out"
+              onClick={this.props.deleteToken}
             />
           </div>
         </nav>

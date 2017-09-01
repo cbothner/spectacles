@@ -2,16 +2,26 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Switch, Route, NavLink, Redirect } from 'react-router-dom'
 
+import LogInDialog from './log_in_dialog.js'
 import VisibleSchedulesList from './schedules_list.js'
 import VisibleFiltersList from './filters_list.js'
 
 import { getFilters, getSchedules } from '../actions.js'
 
+function mapStateToProps({ token }) {
+  return { token }
+}
+
+const mapDispatchToProps = { getFilters, getSchedules }
+
 class Spectacles extends React.Component {
   constructor(props) {
     super(props)
-    props.getFilters()
-    props.getSchedules()
+
+    if (props.token) {
+      props.getFilters()
+      props.getSchedules()
+    }
   }
 
   render() {
@@ -46,11 +56,15 @@ class Spectacles extends React.Component {
           </div>
         </nav>
 
-        <Switch>
-          <Route path="/filters" component={VisibleFiltersList} />
-          <Route path="/schedules" component={VisibleSchedulesList} />
-          <Redirect to="/filters" />
-        </Switch>
+        <LogInDialog />
+
+        {this.props.token && (
+          <Switch>
+            <Route path="/filters" component={VisibleFiltersList} />
+            <Route path="/schedules" component={VisibleSchedulesList} />
+            <Redirect to="/filters" />
+          </Switch>
+        )}
       </main>
     )
   }
@@ -61,4 +75,4 @@ Spectacles.propTypes = {
   schedules: React.PropTypes.array
 }
 
-export default connect(null, { getFilters, getSchedules })(Spectacles)
+export default connect(mapStateToProps, mapDispatchToProps)(Spectacles)

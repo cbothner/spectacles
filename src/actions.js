@@ -1,5 +1,7 @@
 import api from './api.js'
 
+export const SET_TOKEN = 'SET_TOKEN'
+
 export const SET_FILTERS = 'SET_FILTERS'
 export const ADD_FILTER = 'ADD_FILTER'
 export const UPDATE_FILTER = 'UPDATE_FILTER'
@@ -10,11 +12,24 @@ export const ADD_SCHEDULE = 'ADD_SCHEDULE'
 export const UPDATE_SCHEDULE = 'UPDATE_SCHEDULE'
 export const DELETE_SCHEDULE = 'DELETE_SCHEDULE'
 
+export function getToken({ email, password }) {
+  return dispatch =>
+    api
+      .post('/api/admin_token.json', { auth: { email, password } })
+      .then(json => dispatch(setToken(json.jwt)))
+      .then(() => dispatch(getFilters()) && dispatch(getSchedules()))
+      .catch(() => dispatch(setToken(false)))
+}
+
+export function setToken(token) {
+  return { type: SET_TOKEN, token }
+}
+
 // FILTERS
 
 export function getFilters() {
-  return dispatch =>
-    api.get('/api/filters.json').then(json => {
+  return (dispatch, getState) =>
+    api.get('/api/filters.json', getState().token).then(json => {
       if (json.filters) {
         dispatch(setFilters(json.filters))
       }
@@ -22,12 +37,14 @@ export function getFilters() {
 }
 
 export function getFilter(name) {
-  return dispatch =>
-    api.get(`/api/filters/find.json?name=${name}`).then(json => {
-      if (json.filter) {
-        dispatch(updateFilter(json.filter.id, json.filter))
-      }
-    })
+  return (dispatch, getState) =>
+    api
+      .get(`/api/filters/find.json?name=${name}`, getState().token)
+      .then(json => {
+        if (json.filter) {
+          dispatch(updateFilter(json.filter.id, json.filter))
+        }
+      })
 }
 
 function setFilters(filters) {
@@ -35,11 +52,15 @@ function setFilters(filters) {
 }
 
 export function createFilter() {
-  return dispatch =>
+  return (dispatch, getState) =>
     api
-      .post('/api/filters.json', {
-        filter: { name: '' }
-      })
+      .post(
+        '/api/filters.json',
+        {
+          filter: { name: '' }
+        },
+        getState().token
+      )
       .then(json => {
         dispatch(addFilter(json.filter.id))
         return json.filter.id
@@ -51,7 +72,7 @@ export function addFilter(id) {
 }
 
 export function saveFilter(id, data) {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {
       name,
       ce,
@@ -62,18 +83,22 @@ export function saveFilter(id, data) {
       lRatings,
       ods
     } = data
-    api.put(`/api/filters/${id}.json`, {
-      filter: {
-        name,
-        ce,
-        basePrice,
-        color,
-        vlt,
-        spectrophotometerData: spectrophotometerData,
-        lRatings: lRatings,
-        ods: ods
-      }
-    })
+    api.put(
+      `/api/filters/${id}.json`,
+      {
+        filter: {
+          name,
+          ce,
+          basePrice,
+          color,
+          vlt,
+          spectrophotometerData: spectrophotometerData,
+          lRatings: lRatings,
+          ods: ods
+        }
+      },
+      getState().token
+    )
   }
 }
 
@@ -82,10 +107,10 @@ export function updateFilter(id, data) {
 }
 
 export function deleteFilter(id, history) {
-  return dispatch => {
+  return (dispatch, getState) => {
     if (!window.confirm('Are you sure you want to delete this filter?'))
       return { type: null }
-    api.delete(`/api/filters/${id}`).then(() => {
+    api.delete(`/api/filters/${id}`, getState().token).then(() => {
       history.replace('/filters')
       return dispatch({ type: DELETE_FILTER, id })
     })
@@ -95,8 +120,8 @@ export function deleteFilter(id, history) {
 // SCHEDULES
 
 export function getSchedules() {
-  return dispatch =>
-    api.get('/api/schedules.json').then(json => {
+  return (dispatch, getState) =>
+    api.get('/api/schedules.json', getState().token).then(json => {
       if (json.schedules) {
         dispatch(setSchedules(json.schedules))
       }
@@ -108,11 +133,15 @@ export function setSchedules(schedules) {
 }
 
 export function createSchedule() {
-  return dispatch =>
+  return (dispatch, getState) =>
     api
-      .post('/api/schedules.json', {
-        schedule: { name: '' }
-      })
+      .post(
+        '/api/schedules.json',
+        {
+          schedule: { name: '' }
+        },
+        getState().token
+      )
       .then(json => {
         dispatch(addSchedule(json.schedule.id))
         return json.schedule.id
@@ -124,14 +153,18 @@ export function addSchedule(id) {
 }
 
 export function saveSchedule(id, data) {
-  return dispatch => {
+  return (dispatch, getState) => {
     const { name, suggestions } = data
-    api.put(`/api/schedules/${id}.json`, {
-      schedule: {
-        name,
-        suggestions
-      }
-    })
+    api.put(
+      `/api/schedules/${id}.json`,
+      {
+        schedule: {
+          name,
+          suggestions
+        }
+      },
+      getState().token
+    )
   }
 }
 
@@ -140,10 +173,10 @@ export function updateSchedule(id, data) {
 }
 
 export function deleteSchedule(id, history) {
-  return dispatch => {
+  return (dispatch, getState) => {
     if (!window.confirm('Are you sure you want to delete this schedule?'))
       return { type: null }
-    api.delete(`/api/schedules/${id}`).then(() => {
+    api.delete(`/api/schedules/${id}`, getState().token).then(() => {
       history.replace('/schedules')
       return dispatch({ type: DELETE_SCHEDULE, id })
     })

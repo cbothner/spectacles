@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class SchedulesController < ApplicationController
+  before_action :authenticate_admin
   before_action :set_schedule, only: %i[show update destroy]
 
   # GET /schedules

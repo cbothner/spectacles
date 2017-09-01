@@ -1,6 +1,21 @@
 import { combineReducers } from 'redux'
 import * as A from './actions.js'
 
+function token(state = localStorage.getItem('token'), action) {
+  switch (action.type) {
+    case A.SET_TOKEN:
+      localStorage.setItem('token', action.token)
+      return action.token
+
+    case A.DELETE_TOKEN:
+      localStorage.removeItem('token')
+      return null
+
+    default:
+      return state
+  }
+}
+
 function filtersById(state = {}, action) {
   switch (action.type) {
     case A.SET_FILTERS:
@@ -56,6 +71,7 @@ function schedulesById(state = {}, action) {
 }
 
 const reducer = combineReducers({
+  token,
   filtersById,
   schedulesById
 })

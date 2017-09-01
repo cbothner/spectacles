@@ -1,16 +1,17 @@
 export default {
-  get(endpoint) {
+  get(endpoint, token = undefined) {
     let r = new Request(endpoint, {
       credentials: 'same-origin',
       method: 'GET',
       headers: new Headers({
-        Accept: 'application/json'
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`
       })
     })
     return fetch(r).then(validate)
   },
 
-  post(endpoint, params) {
+  post(endpoint, params, token = undefined) {
     let body = JSON.stringify(params)
     let r = new Request(endpoint, {
       credentials: 'same-origin',
@@ -18,13 +19,14 @@ export default {
       body: body,
       headers: new Headers({
         Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       })
     })
     return fetch(r).then(validate)
   },
 
-  put(endpoint, params) {
+  put(endpoint, params, token = undefined) {
     let body = JSON.stringify(params)
     let r = new Request(endpoint, {
       credentials: 'same-origin',
@@ -32,18 +34,20 @@ export default {
       body: body,
       headers: new Headers({
         Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       })
     })
     return fetch(r).then(validate)
   },
 
-  delete(endpoint) {
+  delete(endpoint, token = undefined) {
     let r = new Request(endpoint, {
       credentials: 'same-origin',
       method: 'DELETE',
       headers: new Headers({
-        Accept: 'application/json'
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`
       })
     })
     return fetch(r)

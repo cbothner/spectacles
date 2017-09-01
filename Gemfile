@@ -4,7 +4,9 @@ gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
 gem 'pg'
 gem 'puma', '~> 3.0'
 gem 'jbuilder', '~> 2.5'
-# gem 'rack-cors'
+
+gem 'bcrypt', '~> 3.1.7'
+gem 'knock'
 
 group :development, :test do
   gem 'byebug', platform: :mri

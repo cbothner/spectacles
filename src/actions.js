@@ -17,8 +17,12 @@ export function getToken({ email, password }) {
   return dispatch =>
     api
       .post('/api/admin_token.json', { auth: { email, password } })
-      .then(json => dispatch(setToken(json.jwt)))
-      .then(() => dispatch(getFilters()) && dispatch(getSchedules()))
+      .then(({ jwt: token }) => {
+        dispatch(setToken(token))
+        dispatch(getFilters())
+        dispatch(getSchedules())
+        return { token }
+      })
       .catch(() => dispatch(setToken(false)))
 }
 

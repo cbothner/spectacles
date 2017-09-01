@@ -4,7 +4,7 @@ import * as A from './actions.js'
 function token(state = localStorage.getItem('token'), action) {
   switch (action.type) {
     case A.SET_TOKEN:
-      localStorage.setItem('token', action.token)
+      if (action.token) localStorage.setItem('token', action.token)
       return action.token
 
     case A.DELETE_TOKEN:

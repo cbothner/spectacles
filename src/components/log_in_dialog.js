@@ -19,8 +19,12 @@ class LogInDialog extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    this.props.getToken(this.state)
-    this.setState({ email: '', password: '' })
+    this.props
+      .getToken(this.state)
+      .then(
+        json =>
+          json.token !== false && this.setState({ email: '', password: '' })
+      )
   }
 
   render() {

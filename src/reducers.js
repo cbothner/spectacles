@@ -24,7 +24,7 @@ function filtersById(state = {}, action) {
     case A.ADD_FILTER:
       return {
         ...state,
-        [action.id]: { id: action.id }
+        [action.id]: { id: action.id, name: '' }
       }
 
     case A.UPDATE_FILTER:

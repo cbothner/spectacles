@@ -47,9 +47,9 @@ function FiltersList({ filters, match, handleAddFilter }) {
           </tr>
         </thead>
         <tbody>
-          {filters.map(filter =>
-            <FiltersListEntry key={filter.name} {...filter} />
-          )}
+          {filters.map(filter => (
+            <FiltersListEntry key={filter.id} {...filter} />
+          ))}
         </tbody>
       </table>
 
@@ -82,16 +82,12 @@ function FiltersListEntry({
 }) {
   return (
     <Route>
-      {({ history, match }) =>
+      {({ history, match }) => (
         <tr onClick={() => history.replace(`${match.url}/${id}`)}>
           <td>
-            <span className="pt-tag pt-minimal">
-              {name || '—'}
-            </span>
+            <span className="pt-tag pt-minimal">{name || '—'}</span>
           </td>
-          <td>
-            {ce ? 'Certified' : 'Pending'}
-          </td>
+          <td>{ce ? 'Certified' : 'Pending'}</td>
           <td>{`${vlt || '—'}% ${color || '—'}`}</td>
           <td>
             {`$${parseFloat(basePrice) % 1
@@ -104,23 +100,25 @@ function FiltersListEntry({
           <td>
             <RangeList items={lRatings} />
           </td>
-        </tr>}
+        </tr>
+      )}
     </Route>
   )
 }
 
-const RangeList = ({ items = [] }) =>
+const RangeList = ({ items = [] }) => (
   <p
     style={{ maxWidth: '30em', margin: 0 }}
     className="pt-text-overflow-ellipsis"
   >
-    {items.map((item, i) =>
+    {items.map((item, i) => (
       <span key={i}>
         {i === 0 ? '' : <span className="pt-text-muted"> | </span>}
         {item.range} <strong>{item.value}</strong>
       </span>
-    )}
+    ))}
   </p>
+)
 
 RangeList.propTypes = {
   items: React.PropTypes.array

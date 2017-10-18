@@ -16,6 +16,7 @@ import RangeTable from './range_table.js'
 import Printout from './printout.js'
 import SingleFilterPrintout from './single_filter_printout.js'
 import PrintPortal from './print_portal.js'
+import FrameChooser from './frame_chooser.js'
 
 import {
   getFilters,
@@ -120,17 +121,23 @@ function Filter({
           <RangeTable filterId={id} name="OD Ratings" itemsKey="ods" />
           <RangeTable filterId={id} name="L-Ratings" itemsKey="lRatings" />
         </div>
+        <div
+          className="pt-control-group"
+          style={{ display: 'flex', marginTop: '1em' }}
+        >
+          <FrameChooser id={id} />
+          <AnchorButton
+            text="Print"
+            onClick={() => history.replace(`${match.url}/print`)}
+            iconName="print"
+          />
+        </div>
       </div>
       <div
         className="pt-dialog-footer"
         style={{ display: 'flex', justifyContent: 'space-between' }}
       >
         <div className="pt-dialog-footer-actions">
-          <AnchorButton
-            text="Print"
-            onClick={() => history.replace(`${match.url}/print`)}
-            iconName="print"
-          />
           <Button
             text="Delete"
             onClick={handleDelete}
@@ -150,12 +157,13 @@ function Filter({
 
       <Route
         path={`${match.url}/print`}
-        render={() =>
+        render={() => (
           <PrintPortal>
             <Printout>
               <SingleFilterPrintout filter={filter} />
             </Printout>
-          </PrintPortal>}
+          </PrintPortal>
+        )}
       />
     </Dialog>
   )

@@ -70,10 +70,23 @@ function schedulesById(state = {}, action) {
   }
 }
 
+function ui(
+  state = { selectedFrames: ['43', '44', '38', '53', '55', '52'] },
+  action
+) {
+  switch (action.type) {
+    case A.UPDATE_SELECTED_FRAMES:
+      return { ...state, selectedFrames: action.selectedFrames }
+    default:
+      return state
+  }
+}
+
 const reducer = combineReducers({
   token,
   filtersById,
-  schedulesById
+  schedulesById,
+  ui
 })
 
 export default reducer

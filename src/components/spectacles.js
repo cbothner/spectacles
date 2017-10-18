@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Switch, Route, NavLink, Redirect } from 'react-router-dom'
 
+import DocumentTitle from 'react-document-title'
 import { Button } from '@blueprintjs/core'
 
 import LogInDialog from './log_in_dialog.js'
@@ -28,53 +29,55 @@ class Spectacles extends React.Component {
 
   render() {
     return (
-      <main style={{ margin: '0 auto', maxWidth: '1200px' }}>
-        <nav className="pt-navbar pt-dark">
-          <div className="pt-navbar-group pt-align-left">
-            <div className="pt-navbar-heading">Spectacles</div>
-            <span className="pt-navbar-divider" />
+      <DocumentTitle title="Spectacles">
+        <main style={{ margin: '0 auto', maxWidth: '1200px' }}>
+          <nav className="pt-navbar pt-dark">
+            <div className="pt-navbar-group pt-align-left">
+              <div className="pt-navbar-heading">Spectacles</div>
+              <span className="pt-navbar-divider" />
 
-            <NavLink
-              to="/schedules"
-              className="pt-button pt-minimal pt-icon-document"
-              activeClassName="pt-active"
-            >
-              Schedules
-            </NavLink>
-            <NavLink
-              to="/filters"
-              className="pt-button pt-minimal pt-icon-flash"
-              activeClassName="pt-active"
-            >
-              Filters
-            </NavLink>
-          </div>
-          <div className="pt-navbar-group pt-align-right">
-            <input
-              className="pt-input"
-              placeholder={`Search Spectacles...`}
-              type="text"
-            />
-            <span className="pt-navbar-divider" />
-            <Button
-              className="pt-minimal"
-              text="Log out"
-              iconName="log-out"
-              onClick={this.props.deleteToken}
-            />
-          </div>
-        </nav>
+              <NavLink
+                to="/schedules"
+                className="pt-button pt-minimal pt-icon-document"
+                activeClassName="pt-active"
+              >
+                Schedules
+              </NavLink>
+              <NavLink
+                to="/filters"
+                className="pt-button pt-minimal pt-icon-flash"
+                activeClassName="pt-active"
+              >
+                Filters
+              </NavLink>
+            </div>
+            <div className="pt-navbar-group pt-align-right">
+              <input
+                className="pt-input"
+                placeholder={`Search Spectacles...`}
+                type="text"
+              />
+              <span className="pt-navbar-divider" />
+              <Button
+                className="pt-minimal"
+                text="Log out"
+                iconName="log-out"
+                onClick={this.props.deleteToken}
+              />
+            </div>
+          </nav>
 
-        <LogInDialog />
+          <LogInDialog />
 
-        {this.props.token && (
-          <Switch>
-            <Route path="/filters" component={VisibleFiltersList} />
-            <Route path="/schedules" component={VisibleSchedulesList} />
-            <Redirect to="/filters" />
-          </Switch>
-        )}
-      </main>
+          {this.props.token && (
+            <Switch>
+              <Route path="/filters" component={VisibleFiltersList} />
+              <Route path="/schedules" component={VisibleSchedulesList} />
+              <Redirect to="/filters" />
+            </Switch>
+          )}
+        </main>
+      </DocumentTitle>
     )
   }
 }

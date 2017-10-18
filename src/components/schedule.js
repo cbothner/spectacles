@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 
+import DocumentTitle from 'react-document-title'
 import {
   Dialog,
   AnchorButton,
@@ -91,66 +92,66 @@ class Schedule extends React.Component {
     const absentFilters = absentFilterIds.map(id => filtersById[id])
 
     return (
-      <Dialog
-        isOpen={!!id}
-        onClose={handleCancel}
-        title="Schedule Details"
-        style={{ top: '10%' }}
-      >
-        <div className="pt-dialog-body">
-          <InputGroup
-            leftIconName="document"
-            placeholder="Schedule Name"
-            value={name}
-            onChange={handleChange('name')}
-          />
+      <DocumentTitle title={`${schedule.name || ''} — Spectacles`}>
+        <Dialog
+          isOpen={!!id}
+          onClose={handleCancel}
+          title="Schedule Details"
+          style={{ top: '10%' }}
+        >
+          <div className="pt-dialog-body">
+            <InputGroup
+              leftIconName="document"
+              placeholder="Schedule Name"
+              value={name}
+              onChange={handleChange('name')}
+            />
 
-          <div className="pt-card" style={{ marginTop: '1em' }}>
-            <h5 style={{ marginBottom: '1em' }}>Included Filters</h5>
+            <div className="pt-card" style={{ marginTop: '1em' }}>
+              <h5 style={{ marginBottom: '1em' }}>Included Filters</h5>
 
-            <SortableList items={suggestions} onChange={setSuggestions}>
-              {({ item, index, onChangeItem }) => {
-                let filter = filtersById[item.filterId] || {}
-                return (
-                  <span style={{ display: 'flex', flex: 1 }}>
-                    <Tag
-                      className="pt-large pt-minimal"
-                      style={{
-                        borderRadius: 0,
-                        padding: '4px 10px',
-                        border: '1px solid rgba(16, 22, 26, 0.1)'
-                      }}
-                    >
-                      <strong>
-                        {filter.name || '???'}
-                      </strong>
-                    </Tag>
+              <SortableList items={suggestions} onChange={setSuggestions}>
+                {({ item, index, onChangeItem }) => {
+                  let filter = filtersById[item.filterId] || {}
+                  return (
+                    <span style={{ display: 'flex', flex: 1 }}>
+                      <Tag
+                        className="pt-large pt-minimal"
+                        style={{
+                          borderRadius: 0,
+                          padding: '4px 10px',
+                          border: '1px solid rgba(16, 22, 26, 0.1)'
+                        }}
+                      >
+                        <strong>{filter.name || '???'}</strong>
+                      </Tag>
 
-                    <InputGroup
-                      leftIconName="dollar"
-                      placeholder={`${filter.basePrice} list`}
-                      value={item.specialPrice}
-                      type="number"
-                      step="0.01"
-                      className="flex-grow"
-                      onChange={e =>
-                        onChangeItem({
-                          specialPrice: e.currentTarget.value
-                        })}
-                      rightElement={
-                        item.specialPrice &&
-                        <Tag className="pt-minimal">
-                          ${filter.basePrice} list
-                        </Tag>
-                      }
-                    />
-                  </span>
-                )
-              }}
-            </SortableList>
+                      <InputGroup
+                        leftIconName="dollar"
+                        placeholder={`${filter.basePrice} list`}
+                        value={item.specialPrice}
+                        type="number"
+                        step="0.01"
+                        className="flex-grow"
+                        onChange={e =>
+                          onChangeItem({
+                            specialPrice: e.currentTarget.value
+                          })}
+                        rightElement={
+                          item.specialPrice && (
+                            <Tag className="pt-minimal">
+                              ${filter.basePrice} list
+                            </Tag>
+                          )
+                        }
+                      />
+                    </span>
+                  )
+                }}
+              </SortableList>
 
-            {absentFilters.length > 0
-              ? <div className="pt-control-group" style={{ marginTop: '1em' }}>
+              {absentFilters.length > 0 ? (
+                <div className="pt-control-group" style={{ marginTop: '1em' }}>
                   <div className="pt-select">
                     <select
                       value={selectedFilter}
@@ -159,11 +160,11 @@ class Schedule extends React.Component {
                       <option value={NaN} disabled hidden>
                         Choose a filter
                       </option>
-                      {absentFilters.map(filter =>
+                      {absentFilters.map(filter => (
                         <option key={filter.id} value={filter.id}>
                           {filter.name}
                         </option>
-                      )}
+                      ))}
                     </select>
                   </div>
 
@@ -181,52 +182,56 @@ class Schedule extends React.Component {
                       )}
                   />
                 </div>
-              : <p className="pt-text-muted" style={{ marginTop: '1em' }}>
+              ) : (
+                <p className="pt-text-muted" style={{ marginTop: '1em' }}>
                   This schedule contains all filters.
-                </p>}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div
-          className="pt-dialog-footer"
-          style={{ display: 'flex', justifyContent: 'space-between' }}
-        >
-          <div className="pt-dialog-footer-actions">
-            <AnchorButton
-              text="Print"
-              onClick={() => history.replace(`${match.url}/print`)}
-              iconName="print"
-            />
-            <Button
-              text="Delete"
-              onClick={handleDelete}
-              intent={Intent.DANGER}
-              iconName="trash"
-            />
+          <div
+            className="pt-dialog-footer"
+            style={{ display: 'flex', justifyContent: 'space-between' }}
+          >
+            <div className="pt-dialog-footer-actions">
+              <AnchorButton
+                text="Print"
+                onClick={() => history.replace(`${match.url}/print`)}
+                iconName="print"
+              />
+              <Button
+                text="Delete"
+                onClick={handleDelete}
+                intent={Intent.DANGER}
+                iconName="trash"
+              />
+            </div>
+            <div className="pt-dialog-footer-actions">
+              <Button text="Cancel" onClick={handleCancel} />
+              <Button
+                text="Save"
+                onClick={() => handleSave(schedule)}
+                intent={Intent.PRIMARY}
+              />
+            </div>
           </div>
-          <div className="pt-dialog-footer-actions">
-            <Button text="Cancel" onClick={handleCancel} />
-            <Button
-              text="Save"
-              onClick={() => handleSave(schedule)}
-              intent={Intent.PRIMARY}
-            />
-          </div>
-        </div>
 
-        <Route
-          path={`${match.url}/print`}
-          render={() =>
-            <PrintPortal>
-              <Printout>
-                <SchedulePrintout
-                  schedule={schedule}
-                  filtersById={filtersById}
-                />
-              </Printout>
-            </PrintPortal>}
-        />
-      </Dialog>
+          <Route
+            path={`${match.url}/print`}
+            render={() => (
+              <PrintPortal>
+                <Printout>
+                  <SchedulePrintout
+                    schedule={schedule}
+                    filtersById={filtersById}
+                  />
+                </Printout>
+              </PrintPortal>
+            )}
+          />
+        </Dialog>
+      </DocumentTitle>
     )
   }
 }

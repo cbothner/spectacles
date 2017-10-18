@@ -71,7 +71,7 @@ function schedulesById(state = {}, action) {
 }
 
 function ui(
-  state = { selectedFrames: ['43', '44', '38b', '53', '55', '52'] },
+  state = { selectedFrames: ['43', '44', '38', '38b', '53', '55', '52', '60'] },
   action
 ) {
   switch (action.type) {

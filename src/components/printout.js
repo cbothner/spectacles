@@ -1,14 +1,11 @@
 import React from 'react'
 
-const Printout = ({ children }) =>
+const Printout = ({ children }) => (
   <div className="page">
     <header style={styles.header}>
       <div style={styles.colorBar} />
       <div style={styles.headerInfo}>
-        <img
-          style={{ height: '4em' }}
-          src="http://noirlaser.com/media/images/default/logo.png"
-        />
+        <img style={{ height: 40 }} src={require('../lasershields.svg')} />
         <div style={styles.address}>
           PO Box 159, South Lyon, MI 48178
           <br />
@@ -18,10 +15,9 @@ const Printout = ({ children }) =>
         </div>
       </div>
     </header>
-    <main>
-      {children}
-    </main>
+    <main>{children}</main>
   </div>
+)
 
 export default Printout
 

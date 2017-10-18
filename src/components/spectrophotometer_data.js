@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const SpectrophotometerData = ({ data, onChange }) =>
+const SpectrophotometerData = ({ data, onChange }) => (
   <div className="pt-card" style={{ marginTop: '1em' }}>
     <h5>Spectrophotometer Data</h5>
     <div style={{ display: 'flex' }}>
@@ -41,16 +41,19 @@ const SpectrophotometerData = ({ data, onChange }) =>
           justifyContent: 'center'
         }}
       >
-        {data
-          ? <SpectrophotometerChart data={data} />
-          : <NonIdealState
-              title="No Data"
-              description="Paste wavelength, OD, and %T data from Excel."
-              visual="timeline-line-chart"
-            />}
+        {data ? (
+          <SpectrophotometerChart data={data} />
+        ) : (
+          <NonIdealState
+            title="No Data"
+            description="Paste wavelength, OD, and %T data from Excel."
+            visual="timeline-line-chart"
+          />
+        )}
       </div>
     </div>
   </div>
+)
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   SpectrophotometerData
@@ -70,8 +73,8 @@ function convertCSVToData(csv) {
       return x.length === 3 && !isNaN(x[0])
         ? {
             wavelength: parseInt(x[0], 10),
-            od: x[1],
-            transmittance: x[2]
+            od: parseFloat(x[1]),
+            transmittance: parseFloat(x[2])
           }
         : null
     })

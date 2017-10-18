@@ -7,6 +7,7 @@ import thunk from 'redux-thunk'
 import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 
 import '@blueprintjs/core/dist/blueprint.css'
+import '@blueprintjs/labs/dist/blueprint-labs.css'
 import './App.css'
 
 import { FocusStyleManager } from '@blueprintjs/core'

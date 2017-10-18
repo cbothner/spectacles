@@ -13,6 +13,8 @@ export const ADD_SCHEDULE = 'ADD_SCHEDULE'
 export const UPDATE_SCHEDULE = 'UPDATE_SCHEDULE'
 export const DELETE_SCHEDULE = 'DELETE_SCHEDULE'
 
+export const UPDATE_SELECTED_FRAMES = 'UPDATE_SELECTED_FRAMES'
+
 export function getToken({ email, password }) {
   return dispatch =>
     api
@@ -190,4 +192,17 @@ export function deleteSchedule(id, history) {
       return dispatch({ type: DELETE_SCHEDULE, id })
     })
   }
+}
+
+// FRAMES
+
+export function getAvailableFrames(id) {
+  return (dispatch, getState) =>
+    api
+      .get(`/api/filters/${id}/frames.json`, getState().token)
+      .then(availableFrames => dispatch(updateFilter(id, { availableFrames })))
+}
+
+export function updateSelectedFrames(selectedFrames) {
+  return { type: UPDATE_SELECTED_FRAMES, selectedFrames }
 }

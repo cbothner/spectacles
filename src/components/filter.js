@@ -123,13 +123,15 @@ function Filter({
         </div>
         <div
           className="pt-control-group"
-          style={{ display: 'flex', marginTop: '1em' }}
+          style={{ display: 'flex', marginTop: '1em', alignItems: 'stretch' }}
         >
           <FrameChooser id={id} />
           <AnchorButton
             text="Print"
             onClick={() => history.replace(`${match.url}/print`)}
             iconName="print"
+            disabled={!filter.availableFrames}
+            style={{ minWidth: 72 }}
           />
         </div>
       </div>

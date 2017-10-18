@@ -6,9 +6,10 @@ import { MultiSelect } from '@blueprintjs/labs'
 import { getAvailableFrames, updateSelectedFrames } from '../actions'
 
 function mapStateToProps({ filtersById, ui }, { id }) {
-  const availableFrames = filtersById[id].availableFrames || {}
+  const availableFrames = Object.keys(filtersById[id].availableFrames || {})
+  const availableFramesLoaded = !!filtersById[id].availableFrames
   const { selectedFrames } = ui
-  return { id, availableFrames, selectedFrames }
+  return { id, availableFrames, availableFramesLoaded, selectedFrames }
 }
 
 class FrameChooser extends React.Component {
@@ -17,7 +18,12 @@ class FrameChooser extends React.Component {
   }
 
   render() {
-    const { availableFrames, selectedFrames, updateSelectedFrames } = this.props
+    const {
+      availableFrames,
+      availableFramesLoaded,
+      selectedFrames,
+      updateSelectedFrames
+    } = this.props
     return (
       <MultiSelect
         resetOnSelect
@@ -31,7 +37,7 @@ class FrameChooser extends React.Component {
             )
         }}
         popoverProps={{ popoverClassName: 'pt-minimal' }}
-        items={Object.keys(availableFrames)}
+        items={availableFrames}
         itemPredicate={(query, item) => item.indexOf(query) >= 0}
         selectedItems={selectedFrames}
         itemRenderer={({ handleClick, isActive, item: frame }) => (
@@ -45,7 +51,10 @@ class FrameChooser extends React.Component {
           />
         )}
         noResults={<MenuItem disabled text="No results." />}
-        tagRenderer={frame => frame}
+        tagRenderer={frame =>
+          !availableFramesLoaded || availableFrames.includes(frame)
+            ? frame
+            : `${frame} (not found)`}
         onItemSelect={frame =>
           selectedFrames.indexOf(frame) < 0 &&
           updateSelectedFrames([...selectedFrames, frame])}

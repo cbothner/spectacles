@@ -5,6 +5,7 @@ require 'open-uri'
 class FrameScraper
   def initialize(filter_name)
     @filter_name = filter_name.downcase
+    @available_frames = {} if @filter_name.blank?
   end
 
   # Scrapes the NoIR website for the frames a given filter is available in and

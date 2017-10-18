@@ -7,7 +7,7 @@ const Printout = ({ children }) => (
       <div style={styles.headerInfo}>
         <img style={{ height: 40 }} src={require('../lasershields.svg')} />
         <div style={styles.address}>
-          PO Box 159, South Lyon, MI 48178
+          4975 Technical Drive, Milford, MI 48381 USA
           <br />
           +1 (800) 521-9746 | +1 (734) 769-5565
           <br />

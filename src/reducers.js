@@ -1,10 +1,21 @@
 import { combineReducers } from 'redux'
+import { isBefore, subDays } from 'date-fns'
 import * as A from './actions.js'
 
-function token(state = localStorage.getItem('token'), action) {
+const olderThanOneDay = date => isBefore(date, subDays(new Date(), 1))
+
+function token(state, action) {
+  if (state === undefined) {
+    if (olderThanOneDay(localStorage.getItem('tokenCreatedAt'))) return null
+    return localStorage.getItem('token')
+  }
+
   switch (action.type) {
     case A.SET_TOKEN:
-      if (action.token) localStorage.setItem('token', action.token)
+      if (action.token) {
+        localStorage.setItem('token', action.token)
+        localStorage.setItem('tokenCreatedAt', new Date())
+      }
       return action.token
 
     case A.DELETE_TOKEN:

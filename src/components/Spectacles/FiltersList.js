@@ -4,8 +4,8 @@ import { Route } from 'react-router-dom'
 
 import { Button, Intent } from '@blueprintjs/core'
 
-import Filter from './filter'
-import { createFilter } from '../actions'
+import Filter from 'components/Filter'
+import { createFilter } from 'redux/actions'
 
 function mapStateToProps(state) {
   return {
@@ -90,9 +90,11 @@ function FiltersListEntry({
           <td>{ce ? 'Certified' : 'Pending'}</td>
           <td>{`${vlt || '—'}% ${color || '—'}`}</td>
           <td>
-            {`$${parseFloat(basePrice) % 1
-              ? parseFloat(basePrice).toFixed(2)
-              : parseInt(basePrice, 10) || '—'}`}
+            {`$${
+              parseFloat(basePrice) % 1
+                ? parseFloat(basePrice).toFixed(2)
+                : parseInt(basePrice, 10) || '—'
+            }`}
           </td>
           <td>
             <RangeList items={ods} />

@@ -5,7 +5,7 @@ const Printout = ({ children }) => (
     <header style={styles.header}>
       <div style={styles.colorBar} />
       <div style={styles.headerInfo}>
-        <img style={{ height: 40 }} src={require('../lasershields.svg')} />
+        <img style={{ height: 40 }} src={require('lasershields.svg')} />
         <div style={styles.address}>
           4975 Technical Drive, Milford, MI 48381 USA
           <br />
@@ -20,6 +20,8 @@ const Printout = ({ children }) => (
 )
 
 export default Printout
+
+export { default as SchedulePrintout } from './SchedulePrintout'
 
 const styles = {
   header: {

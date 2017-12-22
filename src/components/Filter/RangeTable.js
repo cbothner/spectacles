@@ -3,11 +3,10 @@ import { connect } from 'react-redux'
 
 import { Button, Intent } from '@blueprintjs/core'
 
-import SortableList from './sortable_list.js'
+import SortableList from 'components/utility/SortableList'
 
-import { updateFilter } from '../actions.js'
-
-import { push } from '../immutable_array.js'
+import { updateFilter } from 'redux/actions'
+import { push } from 'shared/immutableArray'
 
 function fixRangeTypography(range) {
   return range.replace(/([^Ee])-/g, '$1–')
@@ -38,12 +37,10 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
 function RangeTable({ items = [], name, setItems }) {
   return (
     <div className="pt-card" style={{ width: 'calc(50% - 0.5em)' }}>
-      <h5>
-        {name}
-      </h5>
+      <h5>{name}</h5>
 
       <SortableList items={items} onChange={setItems}>
-        {({ item, onChangeItem }) =>
+        {({ item, onChangeItem }) => (
           <span style={{ display: 'flex' }}>
             <input
               className="pt-input"
@@ -65,7 +62,8 @@ function RangeTable({ items = [], name, setItems }) {
                 onChangeItem({ value: e.currentTarget.value })
               }}
             />
-          </span>}
+          </span>
+        )}
       </SortableList>
 
       <Button

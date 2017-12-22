@@ -5,11 +5,11 @@ import { Switch, Route, NavLink, Redirect } from 'react-router-dom'
 import DocumentTitle from 'react-document-title'
 import { Button } from '@blueprintjs/core'
 
-import LogInDialog from './log_in_dialog.js'
-import VisibleSchedulesList from './schedules_list.js'
-import VisibleFiltersList from './filters_list.js'
+import LogInDialog from './LogInDialog'
+import VisibleSchedulesList from './SchedulesList'
+import VisibleFiltersList from './FiltersList'
 
-import { getFilters, getSchedules, deleteToken } from '../actions.js'
+import { getFilters, getSchedules, deleteToken } from 'redux/actions'
 
 function mapStateToProps({ token }) {
   return { token }

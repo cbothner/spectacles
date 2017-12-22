@@ -1,4 +1,4 @@
-import api from './api.js'
+import api from 'shared/api'
 
 export const SET_TOKEN = 'SET_TOKEN'
 export const DELETE_TOKEN = 'DELETE_TOKEN'

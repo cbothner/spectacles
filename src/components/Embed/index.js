@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import SpectrophotometerChart from './spectrophotometer_chart'
+import { SpectrophotometerChart } from 'components/Filter'
 
-import { getFilter } from '../actions.js'
+import { getFilter } from 'redux/actions'
 
-import '../embed.css'
+import 'embed.css'
 
 var throttle = (type, name, obj) => {
   obj = obj || window

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import SpectrophotometerChart from './spectrophotometer_chart.js'
-import RangeTablePrintout from './range_table_printout.js'
+import { SpectrophotometerChart } from 'components/Filter'
+import RangeTablePrintout from './RangeTablePrintout'
 
 const SingleFilterPrintout = ({ filter, selectedFrames }) => {
   const frameImages = selectedFrames

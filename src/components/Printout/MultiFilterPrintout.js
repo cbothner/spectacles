@@ -1,7 +1,7 @@
 import React from 'react'
 
-import RangeTablePrintout from './range_table_printout.js'
-import SpectrophotometerChart from './spectrophotometer_chart.js'
+import RangeTablePrintout from './RangeTablePrintout'
+import { SpectrophotometerChart } from 'components/Filter'
 
 import { Colors } from '@blueprintjs/core'
 

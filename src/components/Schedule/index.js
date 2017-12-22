@@ -17,14 +17,13 @@ import {
   updateSchedule,
   saveSchedule,
   deleteSchedule
-} from '../actions.js'
+} from 'redux/actions'
 
-import { push } from '../immutable_array.js'
+import { push } from 'shared/immutableArray'
 
-import Printout from './printout.js'
-import SchedulePrintout from './schedule_printout.js'
-import PrintPortal from './print_portal.js'
-import SortableList from './sortable_list.js'
+import Printout, { SchedulePrintout } from 'components/Printout'
+import PrintPortal from 'components/utility/PrintPortal'
+import SortableList from 'components/utility/SortableList'
 
 function mapStateToProps(state, { match }) {
   let schedule = state.schedulesById[match.params.scheduleId]
@@ -136,7 +135,8 @@ class Schedule extends React.Component {
                         onChange={e =>
                           onChangeItem({
                             specialPrice: e.currentTarget.value
-                          })}
+                          })
+                        }
                         rightElement={
                           item.specialPrice && (
                             <Tag className="pt-minimal">
@@ -179,7 +179,8 @@ class Schedule extends React.Component {
                           filterId: selectedFilter,
                           specialPrice: ''
                         })
-                      )}
+                      )
+                    }
                   />
                 </div>
               ) : (

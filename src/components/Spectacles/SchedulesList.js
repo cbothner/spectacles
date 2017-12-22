@@ -4,8 +4,8 @@ import { Route } from 'react-router-dom'
 
 import { Button, Intent, Tag } from '@blueprintjs/core'
 
-import Schedule from './schedule.js'
-import { createSchedule } from '../actions.js'
+import Schedule from 'components/Schedule'
+import { createSchedule } from 'redux/actions'
 
 function mapStateToProps(state) {
   return {
@@ -63,11 +63,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(SchedulesList)
 const SchedulesListEntry = ({ id, name = '—', suggestions = [] }) => {
   return (
     <Route>
-      {({ history, match }) =>
+      {({ history, match }) => (
         <tr onClick={() => history.replace(`${match.url}/${id}`)}>
-          <td>
-            {name}
-          </td>
+          <td>{name}</td>
           <td style={{ lineHeight: 1.8, paddingTop: 8 }}>
             {suggestions.map(suggestion => {
               return (
@@ -79,7 +77,8 @@ const SchedulesListEntry = ({ id, name = '—', suggestions = [] }) => {
               )
             })}
           </td>
-        </tr>}
+        </tr>
+      )}
     </Route>
   )
 }
@@ -91,7 +90,7 @@ SchedulesListEntry.propTypes = {
 
 const FilterTag = connect((state, ownProps) => ({
   name: (state.filtersById[ownProps.filterId] || {}).name
-}))(({ name = '???', discounted }) =>
+}))(({ name = '???', discounted }) => (
   <Tag
     intent={discounted && Intent.SUCCESS}
     style={{ marginRight: 5 }}
@@ -99,4 +98,4 @@ const FilterTag = connect((state, ownProps) => ({
   >
     {name}
   </Tag>
-)
+))

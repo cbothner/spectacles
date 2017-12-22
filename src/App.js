@@ -13,10 +13,10 @@ import './App.css'
 import { FocusStyleManager } from '@blueprintjs/core'
 FocusStyleManager.onlyShowFocusOnTabs()
 
-import reducer from './reducers.js'
+import reducer from 'redux/reducers'
 
-import Spectacles from './components/spectacles.js'
-import Embed from './components/embed.js'
+import Spectacles from 'components/Spectacles'
+import Embed from 'components/Embed'
 
 const store = createStore(reducer, applyMiddleware(thunk))
 

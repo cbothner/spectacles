@@ -2,11 +2,11 @@ import React from 'react'
 
 import { Button, InputGroup, Tag } from '@blueprintjs/core'
 
-import SpectrophotometerChart from './spectrophotometer_chart.js'
+import { SpectrophotometerChart } from 'components/Filter'
 
-const FilterPrintouts = ({ filters }) =>
+const FilterPrintouts = ({ filters }) => (
   <main>
-    {filters.map(filter =>
+    {filters.map(filter => (
       <div className="page">
         <div style={{ display: 'flex' }}>
           <div className="pt-control-group pt-vertical">
@@ -57,7 +57,8 @@ const FilterPrintouts = ({ filters }) =>
           </div>
         </div>
       </div>
-    )}
+    ))}
   </main>
+)
 
 export default FilterPrintouts

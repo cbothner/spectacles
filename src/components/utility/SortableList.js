@@ -7,17 +7,17 @@ import {
   arrayMove
 } from 'react-sortable-hoc'
 
-import { update, push, remove } from '../immutable_array.js'
+import { update, push, remove } from 'shared/immutableArray'
 
-const Handle = SortableHandle(() =>
+const Handle = SortableHandle(() => (
   <span
     className="pt-button pt-icon-drag-handle-horizontal"
     style={{ paddingLeft: 7 }}
   />
-)
+))
 
 const Item = SortableElement(
-  ({ item, index, children, onChangeItem, onRemove }) =>
+  ({ item, index, children, onChangeItem, onRemove }) => (
     <div className="pt-control-group" style={{ marginBottom: '0.5em' }}>
       <Handle />
 
@@ -25,11 +25,12 @@ const Item = SortableElement(
 
       <Button intent={Intent.DANGER} iconName="remove" onClick={onRemove} />
     </div>
+  )
 )
 
-const Container = SortableContainer(({ items, children, onChange }) =>
+const Container = SortableContainer(({ items, children, onChange }) => (
   <div>
-    {items.map((item, i) =>
+    {items.map((item, i) => (
       <Item
         key={i}
         index={i}
@@ -38,18 +39,20 @@ const Container = SortableContainer(({ items, children, onChange }) =>
         onChangeItem={attrs => onChange(update(items, i, attrs))}
         onRemove={() => onChange(remove(items, i))}
       />
-    )}
+    ))}
   </div>
-)
+))
 
-const SortableList = props =>
+const SortableList = props => (
   <Container
     {...props}
     onSortEnd={({ oldIndex, newIndex }) =>
-      props.onChange(arrayMove(props.items, oldIndex, newIndex))}
+      props.onChange(arrayMove(props.items, oldIndex, newIndex))
+    }
     useDragHandle={true}
     transitionDuration={100}
     helperClass="sortable-helper"
   />
+)
 
 export default SortableList

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { MenuItem } from '@blueprintjs/core'
 import { MultiSelect } from '@blueprintjs/labs'
 
-import { getAvailableFrames, updateSelectedFrames } from '../actions'
+import { getAvailableFrames, updateSelectedFrames } from 'redux/actions'
 
 function mapStateToProps({ filtersById, ui }, { id }) {
   const availableFrames = Object.keys(filtersById[id].availableFrames || {})
@@ -54,10 +54,12 @@ class FrameChooser extends React.Component {
         tagRenderer={frame =>
           !availableFramesLoaded || availableFrames.includes(frame)
             ? frame
-            : `${frame} (not found)`}
+            : `${frame} (not found)`
+        }
         onItemSelect={frame =>
           selectedFrames.indexOf(frame) < 0 &&
-          updateSelectedFrames([...selectedFrames, frame])}
+          updateSelectedFrames([...selectedFrames, frame])
+        }
       />
     )
   }

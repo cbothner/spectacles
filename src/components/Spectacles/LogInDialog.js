@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { Dialog, InputGroup, Button, Intent } from '@blueprintjs/core'
 
-import { getToken } from '../actions.js'
+import { getToken } from 'redux/actions'
 
 function mapStateToProps({ token }) {
   return { token }

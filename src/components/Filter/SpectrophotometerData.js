@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 
 import { NonIdealState } from '@blueprintjs/core'
 
-import SpectrophotometerChart from './spectrophotometer_chart.js'
-import { updateFilter } from '../actions.js'
+import SpectrophotometerChart from './SpectrophotometerChart'
+import { updateFilter } from 'redux/actions'
 
 const mapStateToProps = (state, ownProps) => {
   return {

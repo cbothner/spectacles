@@ -12,19 +12,18 @@ import {
   Intent
 } from '@blueprintjs/core'
 
-import SpectrophotometerData from './spectrophotometer_data.js'
-import RangeTable from './range_table.js'
-import Printout from './printout.js'
-import SingleFilterPrintout from './single_filter_printout.js'
-import PrintPortal from './print_portal.js'
-import FrameChooser from './frame_chooser.js'
+import FrameChooser from './FrameChooser'
+import RangeTable from './RangeTable'
+import SpectrophotometerData from './SpectrophotometerData'
+import Printout, { SingleFilterPrintout } from 'components/Printout'
+import PrintPortal from 'components/utility/PrintPortal'
 
 import {
   getFilters,
   updateFilter,
   saveFilter,
   deleteFilter
-} from '../actions.js'
+} from 'redux/actions'
 
 function mapStateToProps({ filtersById, ui }, { match }) {
   return {
@@ -210,3 +209,5 @@ class Filter extends React.Component {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filter)
+
+export { default as SpectrophotometerChart } from './SpectrophotometerChart'

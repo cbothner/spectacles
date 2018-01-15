@@ -1,3 +1,8 @@
+/**
+ * @providesModule LogInDialog
+ * @flow
+ */
+
 import React from 'react'
 import { connect } from 'react-redux'
 
@@ -5,19 +10,27 @@ import { Dialog, InputGroup, Button, Intent } from '@blueprintjs/core'
 
 import { getToken } from 'redux/actions'
 
-function mapStateToProps({ token }) {
+import type { State } from 'redux/state'
+
+function mapStateToProps({ token }: State) {
   return { token }
 }
 
 const mapDispatchToProps = { getToken }
 
-class LogInDialog extends React.Component {
+type Props = { token: string, getToken: typeof getToken }
+class LogInDialog extends React.Component<
+  Props,
+  { email: string, password: string }
+> {
   state = { email: '', password: '' }
 
-  handleChangeEmail = e => this.setState({ email: e.target.value })
-  handleChangePassword = e => this.setState({ password: e.target.value })
+  handleChangeEmail = (e: SyntheticInputEvent<*>) =>
+    this.setState({ email: e.target.value })
+  handleChangePassword = (e: SyntheticInputEvent<*>) =>
+    this.setState({ password: e.target.value })
 
-  handleSubmit = e => {
+  handleSubmit = (e: SyntheticInputEvent<*>) => {
     e.preventDefault()
     this.props
       .getToken(this.state)

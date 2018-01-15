@@ -1,17 +1,26 @@
+/**
+ * @providesModule api
+ * @flow
+ */
+
 export default {
-  get(endpoint, token = undefined) {
+  get(endpoint: string, token: ?string = undefined): Promise<any> {
     let r = new Request(endpoint, {
       credentials: 'same-origin',
       method: 'GET',
       headers: new Headers({
         Accept: 'application/json',
-        Authorization: `Bearer ${token}`
+        ...(token == null ? {} : { Authorization: `Bearer ${token}` })
       })
     })
     return fetch(r).then(validate)
   },
 
-  post(endpoint, params, token = undefined) {
+  post(
+    endpoint: string,
+    params: Object,
+    token: ?string = undefined
+  ): Promise<any> {
     let body = JSON.stringify(params)
     let r = new Request(endpoint, {
       credentials: 'same-origin',
@@ -19,14 +28,20 @@ export default {
       body: body,
       headers: new Headers({
         Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
       })
     })
     return fetch(r).then(validate)
   },
 
-  put(endpoint, params, token = undefined) {
+  put(
+    endpoint: string,
+    params: Object,
+    token: ?string = undefined
+  ): Promise<any> {
+    if (token == null) return Promise.resolve()
+
     let body = JSON.stringify(params)
     let r = new Request(endpoint, {
       credentials: 'same-origin',
@@ -41,7 +56,9 @@ export default {
     return fetch(r).then(validate)
   },
 
-  delete(endpoint, token = undefined) {
+  delete(endpoint: string, token: ?string = undefined): Promise<?Response> {
+    if (token == null) return Promise.resolve()
+
     let r = new Request(endpoint, {
       credentials: 'same-origin',
       method: 'DELETE',
@@ -54,7 +71,7 @@ export default {
   }
 }
 
-function validate(response) {
+function validate(response: any): Object {
   if (!response.ok) {
     throw new Error(`Status ${response.status}`)
   }

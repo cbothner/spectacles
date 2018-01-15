@@ -1,3 +1,8 @@
+/**
+ * @providesModule FiltersList
+ * @flow
+ */
+
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
@@ -7,7 +12,14 @@ import { Button, Intent } from '@blueprintjs/core'
 import Filter from 'components/Filter'
 import { createFilter } from 'redux/actions'
 
-function mapStateToProps(state) {
+import type { ContextRouter } from 'react-router-dom'
+
+import type { Dispatch } from 'redux/actions'
+import type { State, Filter as FilterT } from 'redux/state'
+
+type OwnProps = { ...ContextRouter }
+
+function mapStateToProps(state: State) {
   return {
     filters: Object.keys(state.filtersById)
       .map(x => state.filtersById[x])
@@ -15,7 +27,7 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch, { history }) {
+function mapDispatchToProps(dispatch: Dispatch, { history }: OwnProps) {
   return {
     handleAddFilter: () => {
       dispatch(createFilter()).then(id => history.replace(`/filters/${id}`))
@@ -23,7 +35,8 @@ function mapDispatchToProps(dispatch, { history }) {
   }
 }
 
-function FiltersList({ filters, match, handleAddFilter }) {
+type Props = OwnProps & { handleAddFilter: () => {} } & { filters: FilterT[] }
+function FiltersList({ filters, match, handleAddFilter }: Props) {
   return (
     <article style={{ marginTop: '2em' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -56,16 +69,6 @@ function FiltersList({ filters, match, handleAddFilter }) {
       <Route path={`${match.url}/:filterId`} component={Filter} />
     </article>
   )
-}
-
-FiltersList.propTypes = {
-  filters: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-  match: PropTypes.shape({ url: PropTypes.string }).isRequired,
-  handleAddFilter: PropTypes.func.isRequired
-}
-
-FiltersList.defaultProps = {
-  filters: []
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FiltersList)
@@ -121,7 +124,3 @@ const RangeList = ({ items = [] }) => (
     ))}
   </p>
 )
-
-RangeList.propTypes = {
-  items: React.PropTypes.array
-}

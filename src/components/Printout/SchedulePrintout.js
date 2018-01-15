@@ -1,7 +1,19 @@
+/**
+ * @providesModule SchedulePrintout
+ * @flow
+ */
+
 import React from 'react'
 import MultiFilterPrintout from './MultiFilterPrintout'
 
-const SchedulePrintout = ({ schedule, filtersById }) => (
+import type { Schedule, FiltersState } from 'redux/state'
+const SchedulePrintout = ({
+  schedule,
+  filtersById
+}: {
+  schedule: Schedule,
+  filtersById: FiltersState
+}) => (
   <div>
     <div style={{ margin: '1.5em 10em' }}>
       <div style={{ marginTop: '1rem' }}>

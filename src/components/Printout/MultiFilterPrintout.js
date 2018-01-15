@@ -1,3 +1,8 @@
+/**
+ * @providesModule MultiFilterPrintout
+ * @flow
+ */
+
 import React from 'react'
 
 import RangeTablePrintout from './RangeTablePrintout'
@@ -5,7 +10,15 @@ import { SpectrophotometerChart } from 'components/Filter'
 
 import { Colors } from '@blueprintjs/core'
 
-const MultiFilterPrintout = ({ suggestions, filtersById }) => {
+import type { FiltersState, Suggestion } from 'redux/state'
+
+const MultiFilterPrintout = ({
+  suggestions,
+  filtersById
+}: {
+  suggestions: Suggestion[],
+  filtersById: FiltersState
+}) => {
   return (
     <div style={{ margin: '1.5em 2em' }}>
       {suggestions.map(suggestion => {

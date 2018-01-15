@@ -3,10 +3,21 @@ import React from 'react'
 import { SpectrophotometerChart } from 'components/Filter'
 import RangeTablePrintout from './RangeTablePrintout'
 
-const SingleFilterPrintout = ({ filter, selectedFrames }) => {
-  const frameImages = selectedFrames
-    .map(frame => ({ image: filter.availableFrames[frame], frame }))
-    .filter(x => x.image)
+import type { Filter } from 'redux/state'
+
+const SingleFilterPrintout = ({
+  filter,
+  selectedFrames
+}: {
+  filter: Filter,
+  selectedFrames: string[]
+}) => {
+  const { availableFrames } = filter
+  if (availableFrames == null) return null
+
+  const frameImages: { image: string, frame: string }[] = selectedFrames
+    .map(frame => ({ image: availableFrames[frame], frame }))
+    .filter(x => x.image != null)
   return (
     <div style={{ margin: '1.5em 10em' }}>
       <div style={styles.titleRow}>
@@ -117,7 +128,7 @@ const styles = {
   }
 }
 
-const numberOfColumns = numberOfFrames =>
+const numberOfColumns = (numberOfFrames: number) =>
   numberOfFrames > 4
     ? numberOfFrames > 10
       ? Math.ceil(numberOfFrames / 3)

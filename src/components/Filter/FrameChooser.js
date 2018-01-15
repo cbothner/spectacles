@@ -1,3 +1,8 @@
+/**
+ * @providesModule FrameChooser
+ * @flow
+ */
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { MenuItem } from '@blueprintjs/core'
@@ -5,14 +10,25 @@ import { MultiSelect } from '@blueprintjs/labs'
 
 import { getAvailableFrames, updateSelectedFrames } from 'redux/actions'
 
-function mapStateToProps({ filtersById, ui }, { id }) {
+import type { State } from 'redux/state'
+
+type OwnProps = { id: string }
+function mapStateToProps({ filtersById, ui }: State, { id }: OwnProps) {
   const availableFrames = Object.keys(filtersById[id].availableFrames || {})
   const availableFramesLoaded = !!filtersById[id].availableFrames
   const { selectedFrames } = ui
   return { id, availableFrames, availableFramesLoaded, selectedFrames }
 }
 
-class FrameChooser extends React.Component {
+type Props = OwnProps & {
+  id: string,
+  availableFrames: string[],
+  availableFramesLoaded: boolean,
+  selectedFrames: string[],
+  getAvailableFrames: typeof getAvailableFrames,
+  updateSelectedFrames: typeof updateSelectedFrames
+}
+class FrameChooser extends React.Component<Props> {
   componentDidMount() {
     this.props.getAvailableFrames(this.props.id)
   }
@@ -31,10 +47,8 @@ class FrameChooser extends React.Component {
         tagInputProps={{
           leftIconName: 'media',
           inputProps: { placeholder: 'Choose frame images to include...' },
-          onRemove: (_frame, index) =>
-            updateSelectedFrames(
-              selectedFrames.filter((_frame, i) => i !== index)
-            )
+          onRemove: (_, index) =>
+            updateSelectedFrames(selectedFrames.filter((_, i) => i !== index))
         }}
         popoverProps={{ popoverClassName: 'pt-minimal' }}
         items={availableFrames}

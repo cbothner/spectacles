@@ -1,6 +1,20 @@
+/**
+ * @providesModule SpectrophotometerChart
+ * @flow
+ */
+
 import React from 'react'
 import { LineChart, XAxis, YAxis, Legend, Line, Tooltip } from 'recharts'
 
+import type { SpectrophotometerReading } from 'redux/state'
+type Props = {
+  data: SpectrophotometerReading[],
+  forPrint?: boolean,
+  embedded?: boolean,
+  center?: boolean,
+  width?: number,
+  height?: number
+}
 function SpectrophotometerChart({
   data,
   forPrint,
@@ -8,7 +22,7 @@ function SpectrophotometerChart({
   center,
   width = 500,
   height = 200
-}) {
+}: Props) {
   const margins = embedded
     ? { top: 0, right: 0, bottom: 10, left: 0 }
     : {
@@ -56,20 +70,26 @@ function SpectrophotometerChart({
 
 export default SpectrophotometerChart
 
-const CustomTooltip = ({ label, payload }) => {
+const CustomTooltip = ({
+  label,
+  payload
+}: {
+  label?: string,
+  payload?: [{ color: string, name: string, value: number }]
+}) => {
+  if (label == null || payload == null) return null
+
   return (
     <div className="pt-card pt-elevation-2">
       <p style={{ margin: 0 }}>
-        <strong>
-          {label}nm
-        </strong>
+        <strong>{label}nm</strong>
       </p>
-      {payload.map(datum =>
+      {payload.map(datum => (
         <p style={{ margin: 0 }}>
           <strong style={{ color: datum.color }}>{datum.name}:</strong>{' '}
           {datum.value.toPrecision(2)}
         </p>
-      )}
+      ))}
     </div>
   )
 }

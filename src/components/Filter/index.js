@@ -1,3 +1,8 @@
+/**
+ * @providesModule Filter
+ * @flow
+ */
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
@@ -25,25 +30,45 @@ import {
   deleteFilter
 } from 'redux/actions'
 
-function mapStateToProps({ filtersById, ui }, { match }) {
+import type { ContextRouter } from 'react-router-dom'
+
+import type { Dispatch } from 'redux/actions'
+import type { State, Filter as FilterT } from 'redux/state'
+
+type OwnProps = { ...ContextRouter }
+function mapStateToProps({ filtersById, ui }: State, { match }: OwnProps) {
+  const { filterId } = match.params
+  if (filterId == null) {
+    throw new Error('How is this component mounting w/o filterId param')
+  }
+
   return {
-    filter: filtersById[match.params.filterId],
+    filter: filtersById[filterId],
     selectedFrames: ui.selectedFrames
   }
 }
 
-function mapDispatchToProps(dispatch, { history, match }) {
-  let id = match.params.filterId
+function mapDispatchToProps(dispatch: Dispatch, { history, match }: OwnProps) {
+  const { filterId } = match.params
+  if (filterId == null) {
+    throw new Error('How is this component mounting w/o filterId param')
+  }
+
   const close = () => history.replace('/filters')
   return {
-    handleChange: attr => e =>
-      dispatch(updateFilter(id, { [attr]: e.currentTarget.value })),
-    handleToggleCE: val => dispatch(updateFilter(id, { ce: val })),
-    handleDelete: () => dispatch(deleteFilter(id, history)),
-    handleSave: data => {
-      dispatch(saveFilter(id, data))
+    handleChange: (attr: $Keys<FilterT>) => (e: SyntheticInputEvent<*>) =>
+      dispatch(updateFilter(filterId, { [attr]: e.target.value })),
+
+    handleToggleCE: (val: boolean) =>
+      dispatch(updateFilter(filterId, { ce: val })),
+
+    handleDelete: () => dispatch(deleteFilter(filterId, history)),
+
+    handleSave: (data: FilterT) => {
+      dispatch(saveFilter(filterId, data))
       close()
     },
+
     handleCancel: () => {
       dispatch(getFilters())
       close()
@@ -51,16 +76,27 @@ function mapDispatchToProps(dispatch, { history, match }) {
   }
 }
 
-class Filter extends React.Component {
-  images = {}
+type Props = OwnProps & { filter: FilterT, selectedFrames: string[] } & {
+  handleChange: ($Keys<FilterT>) => (SyntheticInputEvent<*>) => Promise<mixed>,
+  handleToggleCE: boolean => Promise<mixed>,
+  handleDelete: () => Promise<mixed>,
+  handleSave: FilterT => void,
+  handleCancel: () => void
+}
+class Filter extends React.Component<Props> {
+  images: { [string]: HTMLImageElement } = {}
 
   _preloadFrameImages = () => {
     const { filter, selectedFrames } = this.props
-    if (!filter || !filter.availableFrames) return
+    if (!filter) return
+
+    const { availableFrames } = filter
+    if (!availableFrames) return
+
     selectedFrames.map(frame => {
       if (this.images[frame]) return
       const img = document.createElement('img')
-      img.src = filter.availableFrames[frame] || ''
+      img.src = availableFrames[frame] || ''
       this.images[frame] = img
     })
   }

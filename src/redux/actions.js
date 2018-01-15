@@ -1,22 +1,49 @@
+/**
+ * @flow
+ */
+
+/* eslint-disable no-use-before-define */
+
 import api from 'shared/api'
 
-export const SET_TOKEN = 'SET_TOKEN'
-export const DELETE_TOKEN = 'DELETE_TOKEN'
+import type { RouterHistory } from 'react-router-dom'
 
-export const SET_FILTERS = 'SET_FILTERS'
-export const ADD_FILTER = 'ADD_FILTER'
-export const UPDATE_FILTER = 'UPDATE_FILTER'
-export const DELETE_FILTER = 'DELETE_FILTER'
+import type {
+  State,
+  FiltersState,
+  SchedulesState,
+  Filter,
+  Schedule,
+  Key
+} from './state'
 
-export const SET_SCHEDULES = 'SET_SCHEDULES'
-export const ADD_SCHEDULE = 'ADD_SCHEDULE'
-export const UPDATE_SCHEDULE = 'UPDATE_SCHEDULE'
-export const DELETE_SCHEDULE = 'DELETE_SCHEDULE'
+export type Action =
+  | SetTokenAction
+  | DeleteTokenAction
+  | SetFiltersAction
+  | AddFilterAction
+  | UpdateFilterAction
+  | DeleteFilterAction
+  | SetSchedulesAction
+  | AddScheduleAction
+  | UpdateScheduleAction
+  | DeleteScheduleAction
+  | UpdateSelectedFramesAction
 
-export const UPDATE_SELECTED_FRAMES = 'UPDATE_SELECTED_FRAMES'
+type GetState = () => State
+type ThunkAction = (dispatch: Dispatch, getState: GetState) => any
+export type Dispatch = (
+  action: Action | ThunkAction | Array<Action>
+) => Promise<any>
 
-export function getToken({ email, password }) {
-  return dispatch =>
+export function getToken({
+  email,
+  password
+}: {
+  email: string,
+  password: string
+}): ThunkAction {
+  return (dispatch: Dispatch) =>
     api
       .post('/api/admin_token.json', { auth: { email, password } })
       .then(({ jwt: token }) => {
@@ -25,21 +52,23 @@ export function getToken({ email, password }) {
         dispatch(getSchedules())
         return { token }
       })
-      .catch(() => dispatch(setToken(false)))
+      .catch(() => dispatch(setToken(null)))
 }
 
-export function setToken(token) {
-  return { type: SET_TOKEN, token }
+export type SetTokenAction = { type: 'SET_TOKEN', token: ?string }
+export function setToken(token: ?string): SetTokenAction {
+  return { type: 'SET_TOKEN', token }
 }
 
-export function deleteToken() {
-  return { type: DELETE_TOKEN }
+export type DeleteTokenAction = { type: 'DELETE_TOKEN' }
+export function deleteToken(): DeleteTokenAction {
+  return { type: 'DELETE_TOKEN' }
 }
 
 // FILTERS
 
-export function getFilters() {
-  return (dispatch, getState) =>
+export function getFilters(): ThunkAction {
+  return (dispatch: Dispatch, getState: GetState) =>
     api.get('/api/filters.json', getState().token).then(json => {
       if (json.filters) {
         dispatch(setFilters(json.filters))
@@ -47,8 +76,8 @@ export function getFilters() {
     })
 }
 
-export function getFilter(name) {
-  return (dispatch, getState) =>
+export function getFilter(name: string): ThunkAction {
+  return (dispatch: Dispatch, getState: GetState) =>
     api
       .get(`/api/filters/find.json?name=${name}`, getState().token)
       .then(json => {
@@ -58,12 +87,13 @@ export function getFilter(name) {
       })
 }
 
-function setFilters(filters) {
-  return { type: SET_FILTERS, filters }
+export type SetFiltersAction = { type: 'SET_FILTERS', filters: FiltersState }
+function setFilters(filters: FiltersState): SetFiltersAction {
+  return { type: 'SET_FILTERS', filters }
 }
 
-export function createFilter() {
-  return (dispatch, getState) =>
+export function createFilter(): ThunkAction {
+  return (dispatch: Dispatch, getState: GetState) =>
     api
       .post(
         '/api/filters.json',
@@ -78,12 +108,13 @@ export function createFilter() {
       })
 }
 
-export function addFilter(id) {
-  return { type: ADD_FILTER, id }
+export type AddFilterAction = { type: 'ADD_FILTER', id: Key }
+export function addFilter(id: Key): AddFilterAction {
+  return { type: 'ADD_FILTER', id }
 }
 
-export function saveFilter(id, data) {
-  return (dispatch, getState) => {
+export function saveFilter(id: Key, data: Filter): ThunkAction {
+  return (dispatch: Dispatch, getState: GetState) => {
     const {
       name,
       ce,
@@ -113,25 +144,37 @@ export function saveFilter(id, data) {
   }
 }
 
-export function updateFilter(id, data) {
-  return { type: UPDATE_FILTER, id, data }
+export type UpdateFilterAction = {
+  type: 'UPDATE_FILTER',
+  id: Key,
+  data: $Shape<Filter>
+}
+export function updateFilter(
+  id: Key,
+  data: $Shape<Filter>
+): UpdateFilterAction {
+  return { type: 'UPDATE_FILTER', id, data }
 }
 
-export function deleteFilter(id, history) {
-  return (dispatch, getState) => {
+export type DeleteFilterAction = {
+  type: 'DELETE_FILTER',
+  id: Key
+}
+export function deleteFilter(id: Key, history: RouterHistory): ThunkAction {
+  return (dispatch: Dispatch, getState: GetState) => {
     if (!window.confirm('Are you sure you want to delete this filter?'))
       return { type: null }
     api.delete(`/api/filters/${id}`, getState().token).then(() => {
       history.replace('/filters')
-      return dispatch({ type: DELETE_FILTER, id })
+      return dispatch({ type: 'DELETE_FILTER', id })
     })
   }
 }
 
 // SCHEDULES
 
-export function getSchedules() {
-  return (dispatch, getState) =>
+export function getSchedules(): ThunkAction {
+  return (dispatch: Dispatch, getState: GetState) =>
     api.get('/api/schedules.json', getState().token).then(json => {
       if (json.schedules) {
         dispatch(setSchedules(json.schedules))
@@ -139,12 +182,16 @@ export function getSchedules() {
     })
 }
 
-export function setSchedules(schedules) {
-  return { type: SET_SCHEDULES, schedules }
+export type SetSchedulesAction = {
+  type: 'SET_SCHEDULES',
+  schedules: SchedulesState
+}
+export function setSchedules(schedules: SchedulesState): SetSchedulesAction {
+  return { type: 'SET_SCHEDULES', schedules }
 }
 
-export function createSchedule() {
-  return (dispatch, getState) =>
+export function createSchedule(): ThunkAction {
+  return (dispatch: Dispatch, getState: GetState) =>
     api
       .post(
         '/api/schedules.json',
@@ -159,12 +206,13 @@ export function createSchedule() {
       })
 }
 
-export function addSchedule(id) {
-  return { type: ADD_SCHEDULE, id }
+export type AddScheduleAction = { type: 'ADD_SCHEDULE', id: Key }
+export function addSchedule(id: Key): AddScheduleAction {
+  return { type: 'ADD_SCHEDULE', id }
 }
 
-export function saveSchedule(id, data) {
-  return (dispatch, getState) => {
+export function saveSchedule(id: Key, data: Schedule): ThunkAction {
+  return (dispatch: Dispatch, getState: GetState) => {
     const { name, suggestions } = data
     api.put(
       `/api/schedules/${id}.json`,
@@ -179,30 +227,48 @@ export function saveSchedule(id, data) {
   }
 }
 
-export function updateSchedule(id, data) {
-  return { type: UPDATE_SCHEDULE, id, data }
+export type UpdateScheduleAction = {
+  type: 'UPDATE_SCHEDULE',
+  id: Key,
+  data: $Shape<Schedule>
+}
+export function updateSchedule(
+  id: Key,
+  data: $Shape<Schedule>
+): UpdateScheduleAction {
+  return { type: 'UPDATE_SCHEDULE', id, data }
 }
 
-export function deleteSchedule(id, history) {
-  return (dispatch, getState) => {
+export type DeleteScheduleAction = {
+  type: 'DELETE_SCHEDULE',
+  id: Key
+}
+export function deleteSchedule(id: Key, history: RouterHistory): ThunkAction {
+  return (dispatch: Dispatch, getState: GetState) => {
     if (!window.confirm('Are you sure you want to delete this schedule?'))
       return { type: null }
     api.delete(`/api/schedules/${id}`, getState().token).then(() => {
       history.replace('/schedules')
-      return dispatch({ type: DELETE_SCHEDULE, id })
+      return dispatch({ type: 'DELETE_SCHEDULE', id })
     })
   }
 }
 
 // FRAMES
 
-export function getAvailableFrames(id) {
-  return (dispatch, getState) =>
+export function getAvailableFrames(id: Key): ThunkAction {
+  return (dispatch: Dispatch, getState: GetState) =>
     api
       .get(`/api/filters/${id}/frames.json`, getState().token)
       .then(availableFrames => dispatch(updateFilter(id, { availableFrames })))
 }
 
-export function updateSelectedFrames(selectedFrames) {
-  return { type: UPDATE_SELECTED_FRAMES, selectedFrames }
+export type UpdateSelectedFramesAction = {
+  type: 'UPDATE_SELECTED_FRAMES',
+  selectedFrames: string[]
+}
+export function updateSelectedFrames(
+  selectedFrames: string[]
+): UpdateSelectedFramesAction {
+  return { type: 'UPDATE_SELECTED_FRAMES', selectedFrames }
 }

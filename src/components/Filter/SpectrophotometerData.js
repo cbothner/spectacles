@@ -1,3 +1,7 @@
+/**
+ * @providesModule SpectrophotometerData
+ * @flow
+ */
 import React from 'react'
 import { connect } from 'react-redux'
 
@@ -6,25 +10,33 @@ import { NonIdealState } from '@blueprintjs/core'
 import SpectrophotometerChart from './SpectrophotometerChart'
 import { updateFilter } from 'redux/actions'
 
-const mapStateToProps = (state, ownProps) => {
+import type { Dispatch } from 'redux/actions'
+import type { State, SpectrophotometerReading } from 'redux/state'
+
+type OwnProps = { id: string }
+const mapStateToProps = ({ filtersById }: State, { id }: OwnProps) => {
   return {
-    data: state.filtersById[ownProps.id].spectrophotometerData
+    data: filtersById[id].spectrophotometerData
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch: Dispatch, ownProps: OwnProps) => {
   return {
-    onChange: e => {
+    onChange: (e: SyntheticInputEvent<*>) => {
       dispatch(
         updateFilter(ownProps.id, {
-          spectrophotometerData: convertCSVToData(e.currentTarget.value)
+          spectrophotometerData: convertCSVToData(e.target.value)
         })
       )
     }
   }
 }
 
-const SpectrophotometerData = ({ data, onChange }) => (
+type Props = {
+  data: SpectrophotometerReading[],
+  onChange: (SyntheticInputEvent<*>) => Promise<mixed>
+}
+const SpectrophotometerData = ({ data, onChange }: Props) => (
   <div className="pt-card" style={{ marginTop: '1em' }}>
     <h5>Spectrophotometer Data</h5>
     <div style={{ display: 'flex' }}>
@@ -65,7 +77,7 @@ function convertDataToCSV(data = []) {
     .join('\n')
 }
 
-function convertCSVToData(csv) {
+function convertCSVToData(csv: string): SpectrophotometerReading[] {
   return csv
     .split('\n')
     .map(row => {
@@ -78,5 +90,5 @@ function convertCSVToData(csv) {
           }
         : null
     })
-    .filter(x => x)
+    .filter(Boolean)
 }

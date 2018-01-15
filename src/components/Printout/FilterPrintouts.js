@@ -1,10 +1,17 @@
+/**
+ * @providesModule FilterPrintout
+ * @flow
+ */
+
 import React from 'react'
 
 import { Button, InputGroup, Tag } from '@blueprintjs/core'
 
 import { SpectrophotometerChart } from 'components/Filter'
 
-const FilterPrintouts = ({ filters }) => (
+import type { Filter } from 'redux/state'
+
+const FilterPrintouts = ({ filters }: { filters: Filter[] }) => (
   <main>
     {filters.map(filter => (
       <div className="page">

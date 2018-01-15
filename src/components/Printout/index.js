@@ -1,6 +1,11 @@
-import React from 'react'
+/**
+ * @providesModule Printout
+ * @flow
+ */
 
-const Printout = ({ children }) => (
+import * as React from 'react'
+
+const Printout = ({ children }: { children: React.Node }) => (
   <div className="page">
     <header style={styles.header}>
       <div style={styles.colorBar} />
@@ -22,6 +27,7 @@ const Printout = ({ children }) => (
 export default Printout
 
 export { default as SchedulePrintout } from './SchedulePrintout'
+export { default as SingleFilterPrintout } from './SingleFilterPrintout'
 
 const styles = {
   header: {

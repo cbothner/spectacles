@@ -1,3 +1,8 @@
+/**
+ * @providesModule Schedule
+ * @flow
+ */
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
@@ -25,16 +30,39 @@ import Printout, { SchedulePrintout } from 'components/Printout'
 import PrintPortal from 'components/utility/PrintPortal'
 import SortableList from 'components/utility/SortableList'
 
-function mapStateToProps(state, { match }) {
-  let schedule = state.schedulesById[match.params.scheduleId]
+import type { ContextRouter } from 'react-router-dom'
+
+import type { Dispatch } from 'redux/actions'
+import type {
+  State,
+  Schedule as ScheduleT,
+  Suggestion,
+  FiltersState
+} from 'redux/state'
+
+type OwnProps = { ...ContextRouter }
+function mapStateToProps(
+  { schedulesById, filtersById }: State,
+  { match }: OwnProps
+) {
+  const { scheduleId } = match.params
+  if (scheduleId == null) {
+    throw new Error('How is this component mounting w/o scheduleId param')
+  }
+
+  let schedule = schedulesById[scheduleId]
   return {
     schedule,
-    filtersById: state.filtersById
+    filtersById
   }
 }
 
-function mapDispatchToProps(dispatch, { match, history }) {
-  let id = match.params.scheduleId
+function mapDispatchToProps(dispatch: Dispatch, { match, history }: OwnProps) {
+  const { scheduleId } = match.params
+  if (scheduleId == null) {
+    throw new Error('How is this component mounting w/o scheduleId param')
+  }
+
   const close = () => history.replace('/schedules')
   return {
     handleCancel: () => {
@@ -42,35 +70,45 @@ function mapDispatchToProps(dispatch, { match, history }) {
       close()
     },
 
-    handleChange: attr => e => {
-      dispatch(updateSchedule(id, { [attr]: e.currentTarget.value }))
+    handleChange: (attr: $Keys<ScheduleT>) => (e: SyntheticInputEvent<*>) => {
+      dispatch(updateSchedule(scheduleId, { [attr]: e.target.value }))
     },
 
-    setSuggestions: data => dispatch(updateSchedule(id, { suggestions: data })),
+    setSuggestions: (data: Suggestion[]) =>
+      dispatch(updateSchedule(scheduleId, { suggestions: data })),
 
-    handleSave: data => {
-      dispatch(saveSchedule(id, data))
+    handleSave: (data: ScheduleT) => {
+      dispatch(saveSchedule(scheduleId, data))
       close()
     },
 
-    handleDelete: () => dispatch(deleteSchedule(id, history))
+    handleDelete: () => dispatch(deleteSchedule(scheduleId, history))
   }
 }
 
-class Schedule extends React.Component {
-  state = { selectedFilter: NaN }
+type Props = OwnProps & { schedule: ScheduleT, filtersById: FiltersState } & {
+  handleCancel: () => void,
+  handleChange: (
+    $Keys<ScheduleT>
+  ) => (SyntheticInputEvent<*>) => Promise<mixed>,
+  setSuggestions: (Suggestion[]) => Promise<mixed>,
+  handleSave: ScheduleT => void,
+  handleDelete: () => Promise<mixed>
+}
+class Schedule extends React.Component<Props, { selectedFilter: string }> {
+  state = { selectedFilter: '' }
 
-  handleChangeSelectedFilter = e =>
+  handleChangeSelectedFilter = (e: SyntheticInputEvent<*>) =>
     this.setState({ selectedFilter: e.target.value })
 
-  handleAddSuggestion = suggestions => {
-    this.setState({ selectedFilter: NaN })
+  handleAddSuggestion = (suggestions: Suggestion[]) => {
+    this.setState({ selectedFilter: '' })
     this.props.setSuggestions(suggestions)
   }
 
   render() {
     const {
-      schedule = {},
+      schedule,
       filtersById,
       handleCancel,
       handleChange,
@@ -80,6 +118,8 @@ class Schedule extends React.Component {
       match,
       history
     } = this.props
+    if (schedule == null) return null
+
     const { id, name, suggestions = [] } = schedule
 
     const { selectedFilter } = this.state

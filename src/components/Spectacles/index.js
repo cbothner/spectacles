@@ -1,3 +1,8 @@
+/**
+ * @providesModule Spectacles
+ * @flow
+ */
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { Switch, Route, NavLink, Redirect } from 'react-router-dom'
@@ -11,14 +16,17 @@ import VisibleFiltersList from './FiltersList'
 
 import { getFilters, getSchedules, deleteToken } from 'redux/actions'
 
-function mapStateToProps({ token }) {
+import type { State } from 'redux/state'
+
+function mapStateToProps({ token }: State) {
   return { token }
 }
 
 const mapDispatchToProps = { getFilters, getSchedules, deleteToken }
 
-class Spectacles extends React.Component {
-  constructor(props) {
+type Props = { token: string } & typeof mapDispatchToProps
+class Spectacles extends React.Component<Props> {
+  constructor(props: Props) {
     super(props)
 
     if (props.token) {
@@ -80,11 +88,6 @@ class Spectacles extends React.Component {
       </DocumentTitle>
     )
   }
-}
-
-Spectacles.propTypes = {
-  filters: React.PropTypes.array,
-  schedules: React.PropTypes.array
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Spectacles)

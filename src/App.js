@@ -1,3 +1,8 @@
+/**
+ * @providesModule App
+ * @flow
+ */
+
 import React, { Component } from 'react'
 
 import { createStore, applyMiddleware } from 'redux'
@@ -11,16 +16,17 @@ import '@blueprintjs/labs/dist/blueprint-labs.css'
 import './App.css'
 
 import { FocusStyleManager } from '@blueprintjs/core'
+
+import reducer from 'redux/reducers'
+
+import Spectacles from 'components/Spectacles'
+import Embed from 'components/Embed'
+
 FocusStyleManager.onlyShowFocusOnTabs()
-
-import reducer from './reducers.js'
-
-import Spectacles from './components/spectacles.js'
-import Embed from './components/embed.js'
 
 const store = createStore(reducer, applyMiddleware(thunk))
 
-class App extends Component {
+class App extends Component<{}> {
   render() {
     return (
       <Provider store={store}>

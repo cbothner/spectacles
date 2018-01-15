@@ -36,8 +36,10 @@ import type { Dispatch } from 'redux/actions'
 import type {
   State,
   Schedule as ScheduleT,
+  Suggestions,
+  FiltersState,
   Suggestion,
-  FiltersState
+  Subheading
 } from 'redux/state'
 
 type OwnProps = { ...ContextRouter }
@@ -74,7 +76,7 @@ function mapDispatchToProps(dispatch: Dispatch, { match, history }: OwnProps) {
       dispatch(updateSchedule(scheduleId, { [attr]: e.target.value }))
     },
 
-    setSuggestions: (data: Suggestion[]) =>
+    setSuggestions: (data: Suggestions) =>
       dispatch(updateSchedule(scheduleId, { suggestions: data })),
 
     handleSave: (data: ScheduleT) => {
@@ -91,7 +93,7 @@ type Props = OwnProps & { schedule: ScheduleT, filtersById: FiltersState } & {
   handleChange: (
     $Keys<ScheduleT>
   ) => (SyntheticInputEvent<*>) => Promise<mixed>,
-  setSuggestions: (Suggestion[]) => Promise<mixed>,
+  setSuggestions: Suggestions => Promise<mixed>,
   handleSave: ScheduleT => void,
   handleDelete: () => Promise<mixed>
 }
@@ -101,7 +103,7 @@ class Schedule extends React.Component<Props, { selectedFilter: string }> {
   handleChangeSelectedFilter = (e: SyntheticInputEvent<*>) =>
     this.setState({ selectedFilter: e.target.value })
 
-  handleAddSuggestion = (suggestions: Suggestion[]) => {
+  handleAddSuggestion = (suggestions: Suggestions) => {
     this.setState({ selectedFilter: '' })
     this.props.setSuggestions(suggestions)
   }
@@ -124,7 +126,9 @@ class Schedule extends React.Component<Props, { selectedFilter: string }> {
 
     const { selectedFilter } = this.state
 
-    const suggestionIds = new Set(suggestions.map(s => s.filterId))
+    const suggestionIds = new Set(
+      suggestions.map(s => s.filterId || null).filter(Boolean)
+    )
     const absentFilterIds = Object.keys(filtersById).filter(
       f => !suggestionIds.has(f)
     )
@@ -151,83 +155,116 @@ class Schedule extends React.Component<Props, { selectedFilter: string }> {
 
               <SortableList items={suggestions} onChange={setSuggestions}>
                 {({ item, index, onChangeItem }) => {
-                  let filter = filtersById[item.filterId] || {}
-                  return (
-                    <span style={{ display: 'flex', flex: 1 }}>
-                      <Tag
-                        className="pt-large pt-minimal"
-                        style={{
-                          borderRadius: 0,
-                          padding: '4px 10px',
-                          border: '1px solid rgba(16, 22, 26, 0.1)'
-                        }}
-                      >
-                        <strong>{filter.name || '???'}</strong>
-                      </Tag>
+                  if (item.content !== undefined) {
+                    return (
+                      <span style={{ display: 'flex', flex: 1 }}>
+                        <InputGroup
+                          leftIconName="tag"
+                          placeholder={'Section title'}
+                          value={item.content}
+                          type="text"
+                          className="flex-grow"
+                          onChange={(e: SyntheticInputEvent<*>) =>
+                            onChangeItem({
+                              content: e.target.value
+                            })
+                          }
+                        />
+                      </span>
+                    )
+                  } else if (item.filterId) {
+                    let filter = filtersById[item.filterId] || {}
+                    return (
+                      <span style={{ display: 'flex', flex: 1 }}>
+                        <Tag
+                          className="pt-large pt-minimal"
+                          style={{
+                            borderRadius: 0,
+                            padding: '4px 10px',
+                            border: '1px solid rgba(16, 22, 26, 0.1)'
+                          }}
+                        >
+                          <strong>{filter.name || '???'}</strong>
+                        </Tag>
 
-                      <InputGroup
-                        leftIconName="dollar"
-                        placeholder={`${filter.basePrice} list`}
-                        value={item.specialPrice}
-                        type="number"
-                        step="0.01"
-                        className="flex-grow"
-                        onChange={e =>
-                          onChangeItem({
-                            specialPrice: e.currentTarget.value
-                          })
-                        }
-                        rightElement={
-                          item.specialPrice && (
-                            <Tag className="pt-minimal">
-                              ${filter.basePrice} list
-                            </Tag>
-                          )
-                        }
-                      />
-                    </span>
-                  )
+                        <InputGroup
+                          leftIconName="dollar"
+                          placeholder={`${filter.basePrice} list`}
+                          value={item.specialPrice}
+                          type="number"
+                          step="0.01"
+                          className="flex-grow"
+                          onChange={(e: SyntheticInputEvent<*>) =>
+                            onChangeItem({
+                              specialPrice: e.target.value
+                            })
+                          }
+                          rightElement={
+                            item.specialPrice && (
+                              <Tag className="pt-minimal">
+                                ${filter.basePrice} list
+                              </Tag>
+                            )
+                          }
+                        />
+                      </span>
+                    )
+                  }
                 }}
               </SortableList>
 
-              {absentFilters.length > 0 ? (
-                <div className="pt-control-group" style={{ marginTop: '1em' }}>
-                  <div className="pt-select">
-                    <select
-                      value={selectedFilter}
-                      onChange={this.handleChangeSelectedFilter}
-                    >
-                      <option value={NaN} disabled hidden>
-                        Choose a filter
-                      </option>
-                      {absentFilters.map(filter => (
-                        <option key={filter.id} value={filter.id}>
-                          {filter.name}
+              <div style={{ display: 'flex' }}>
+                {absentFilters.length > 0 ? (
+                  <div
+                    className="pt-control-group"
+                    style={{ marginTop: '1em' }}
+                  >
+                    <div className="pt-select">
+                      <select
+                        value={selectedFilter}
+                        onChange={this.handleChangeSelectedFilter}
+                      >
+                        <option value="" disabled hidden>
+                          Choose a filter
                         </option>
-                      ))}
-                    </select>
-                  </div>
+                        {absentFilters.map(filter => (
+                          <option key={filter.id} value={filter.id}>
+                            {filter.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                  <Button
-                    intent={Intent.SUCCESS}
-                    iconName="add"
-                    text="Add"
-                    disabled={selectedFilter === ''}
-                    onClick={() =>
-                      this.handleAddSuggestion(
-                        push(suggestions, {
-                          filterId: selectedFilter,
-                          specialPrice: ''
-                        })
-                      )
-                    }
-                  />
-                </div>
-              ) : (
-                <p className="pt-text-muted" style={{ marginTop: '1em' }}>
-                  This schedule contains all filters.
-                </p>
-              )}
+                    <Button
+                      intent={Intent.SUCCESS}
+                      iconName="add"
+                      text="Add"
+                      disabled={selectedFilter === ''}
+                      onClick={() =>
+                        this.handleAddSuggestion(
+                          push(suggestions, {
+                            filterId: selectedFilter,
+                            specialPrice: ''
+                          })
+                        )
+                      }
+                    />
+                  </div>
+                ) : (
+                  <p className="pt-text-muted" style={{ marginTop: '1em' }}>
+                    This schedule contains all filters.
+                  </p>
+                )}
+
+                <Button
+                  iconName="tag"
+                  text="Add subheading"
+                  onClick={() =>
+                    this.handleAddSuggestion(push(suggestions, { content: '' }))
+                  }
+                  style={{ marginTop: '1em', marginLeft: '1em' }}
+                />
+              </div>
             </div>
           </div>
 

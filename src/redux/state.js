@@ -39,7 +39,7 @@ export type Schedule = {
   createdAt: Date,
   id: Key,
   name: string,
-  suggestions: Suggestion[],
+  suggestions: Suggestions,
   updatedAt: Date,
   url: string
 }
@@ -50,9 +50,12 @@ export type SpectrophotometerReading = {
   wavelength: number
 }
 
-export type Suggestion = {
+export type Subheading = {| content: string |}
+export type Suggestion = {|
   filterId: Key,
   specialPrice: string
-}
+|}
+
+export type Suggestions = (Subheading | Suggestion)[]
 
 export type Key = string

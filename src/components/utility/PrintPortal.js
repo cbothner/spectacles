@@ -51,7 +51,7 @@ class PrintPortal extends React.Component<{
           document.body && document.body.removeChild(x)
 
           const { location, history } = this.props
-          const index = location.pathname.lastIndexOf('print')
+          const index = location.pathname.lastIndexOf('/print')
           if (index >= 0) history.replace(location.pathname.substring(0, index))
         }, 100)
       })

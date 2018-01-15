@@ -49,8 +49,8 @@ class SchedulesController < ApplicationController
     @schedule = Schedule.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def schedule_params
-    params.require(:schedule).permit(:name, suggestions: %i[filter_id special_price])
+    params.require(:schedule)
+          .permit(:name, suggestions: %i[filter_id special_price content])
   end
 end

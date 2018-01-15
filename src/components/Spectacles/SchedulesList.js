@@ -14,7 +14,7 @@ import { createSchedule } from 'redux/actions'
 
 import type { ContextRouter } from 'react-router-dom'
 
-import type { State, Schedule as ScheduleT, Suggestion } from 'redux/state'
+import type { State, Schedule as ScheduleT, Suggestions } from 'redux/state'
 import type { Dispatch } from 'redux/actions'
 
 type OwnProps = { ...ContextRouter }
@@ -78,7 +78,7 @@ const SchedulesListEntry = ({
 }: {
   id: string,
   name: string,
-  suggestions: Suggestion[]
+  suggestions: Suggestions
 }) => {
   return (
     <Route>
@@ -87,13 +87,17 @@ const SchedulesListEntry = ({
           <td>{name}</td>
           <td style={{ lineHeight: 1.8, paddingTop: 8 }}>
             {suggestions.map(suggestion => {
-              return (
-                <FilterTag
-                  key={suggestion.filterId}
-                  filterId={suggestion.filterId}
-                  discounted={!!suggestion.specialPrice}
-                />
-              )
+              if (suggestion.filterId) {
+                return (
+                  <FilterTag
+                    key={suggestion.filterId}
+                    filterId={suggestion.filterId}
+                    discounted={!!suggestion.specialPrice}
+                  />
+                )
+              } else {
+                return null
+              }
             })}
           </td>
         </tr>

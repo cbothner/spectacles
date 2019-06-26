@@ -13,7 +13,8 @@ class FrameScraper
   # @return Hash{name => image_url}
   def available_frames
     @available_frames ||= scrape_frames
-  rescue
+  rescue StandardError => e
+    Rails.logger.fatal e.full_message
     {}
   end
 

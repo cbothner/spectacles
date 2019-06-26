@@ -15,7 +15,7 @@ class PrintPortal extends React.Component<{
   children: React.Element<*>
 }> {
   componentDidMount() {
-    var x = document.createElement('iframe')
+    let x = document.createElement('iframe')
     x.style.visibility = 'hidden'
     x.style.position = 'fixed'
     x.style.right = '0'
@@ -28,20 +28,20 @@ class PrintPortal extends React.Component<{
     idoc.body && (idoc.body.style.margin = '0')
     idoc.body && (idoc.body.style.backgroundColor = '#F5F8FA')
 
-    var blueprintLink = idoc.createElement('link')
+    let blueprintLink = idoc.createElement('link')
     blueprintLink.rel = 'stylesheet'
     blueprintLink.type = 'text/css'
     blueprintLink.href = '/blueprint.css'
     idoc.head && idoc.head.appendChild(blueprintLink)
 
-    var printStylesheetLink = idoc.createElement('link')
+    let printStylesheetLink = idoc.createElement('link')
     printStylesheetLink.rel = 'stylesheet'
     printStylesheetLink.type = 'text/css'
     printStylesheetLink.media = 'print'
     printStylesheetLink.href = '/print.css'
     idoc.head && idoc.head.appendChild(printStylesheetLink)
 
-    var div = idoc.createElement('div')
+    let div = idoc.createElement('div')
     idoc.body && idoc.body.appendChild(div)
 
     blueprintLink.onload = () => {
